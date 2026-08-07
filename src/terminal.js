@@ -88,7 +88,7 @@ export function initTerminal(navigateTo) {
     open: (args) => {
       if (args[0] === 'resume') {
         return `<span class="dim">unfurling the illustrated scroll...</span>
-resume: <a href="/resume.pdf" target="_blank">resume.pdf</a> <span class="dim">(place your PDF at /public/resume.pdf)</span>`;
+resume: <a href="${import.meta.env.BASE_URL}resume.pdf" target="_blank">resume.pdf</a> <span class="dim">(place your PDF at /public/resume.pdf)</span>`;
       }
       return `<span class="err">open: only the resume unrolls from here</span>`;
     },

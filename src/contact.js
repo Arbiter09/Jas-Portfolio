@@ -31,7 +31,7 @@ const dispatches = [
     glyph: '✎',
     hue: 45,
     value: 'the illustrated scroll (PDF)',
-    href: '/resume.pdf',
+    href: `${import.meta.env.BASE_URL}resume.pdf`,
     note: 'One page. It took longer than this entire site.',
   },
 ];
