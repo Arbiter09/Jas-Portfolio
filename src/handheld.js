@@ -82,6 +82,8 @@ export function initHandheld() {
   const root = document.getElementById('handheld');
 
   const state = {
+    power: true,
+    booting: false,
     view: 'menu',      // menu | detail | lock
     index: 0,
     digits: [0, 0, 0],
@@ -93,6 +95,7 @@ export function initHandheld() {
 
   // ---------- rendering ----------
   function render() {
+    if (!state.power || state.booting) return;
     if (state.view === 'menu') return renderMenu();
     if (state.view === 'lock') return renderLock();
     return renderDetail();
@@ -143,8 +146,32 @@ export function initHandheld() {
       <div class="scr-foot"><span>the crow refuses to help</span><span>A ▸ TRY · B ▸ BACK</span></div>`;
   }
 
+  // ---------- power ----------
+  const powerBtn = document.getElementById('hh-power');
+
+  function setPower(on) {
+    state.power = on;
+    root.classList.toggle('off', !on);
+    powerBtn.setAttribute('aria-checked', String(on));
+
+    if (!on) {
+      state.booting = false;
+      screen.innerHTML = '';
+      return;
+    }
+    // a cold CRT warming up: a line opens out, then the menu arrives
+    state.booting = true;
+    state.view = 'menu';
+    screen.innerHTML = `<div class="scr-bootline"></div>`;
+    beep(880);
+    setTimeout(() => { state.booting = false; render(); beep(1180); }, 620);
+  }
+
+  powerBtn.addEventListener('click', () => setPower(!state.power));
+
   // ---------- input ----------
   function press(btn) {
+    if (!state.power || state.booting) return;
     beep(btn === 'a' ? 660 : btn === 'b' ? 330 : 520);
 
     if (btn === 'select') { state.sound = !state.sound; flash(`SOUND ${state.sound ? 'ON' : 'OFF'}`); return; }
@@ -244,6 +271,7 @@ export function initHandheld() {
   };
   window.addEventListener('keydown', (e) => {
     if (!document.getElementById('page-projects').classList.contains('active')) return;
+    if (!state.power || state.booting) return;
     const btn = KEYS[e.key];
     if (!btn) return;
     e.preventDefault();

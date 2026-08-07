@@ -95,6 +95,8 @@ The screen is amber phosphor on obsidian rather than the classic green LCD, beca
 
 The fifth entry is sealed. Opening it gives you a three digit lock: up and down change a digit, left and right move between them, A tries the combination. The answer is the number of LeetCode problems solved, which is the same number the souls counter on the shrine ticks to. A wrong code shakes the screen and keeps the seal shut.
 
+A slide switch on the top edge cuts the power. Off means a genuinely dead device: the screen goes to bare glass, the red LED goes out, and the controls stop responding. Switching back on runs a short CRT warm-up, a line opening out of the middle, before the menu returns.
+
 SELECT toggles sound, off by default. When on, each press gets a short square wave blip from the Web Audio API. Everything is keyboard playable too: arrow keys, Z or Enter for A, X for B.
 
 ### Experience, the pilgrim's road

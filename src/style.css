@@ -352,22 +352,62 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
 }
 @keyframes scr-flash { 0% { opacity: 0; } 14% { opacity: 1; } 72% { opacity: 1; } 100% { opacity: 0; } }
 
-/* wordmark, deliberately not anybody else's */
-.hh-wordmark {
-  display: flex; align-items: baseline; justify-content: center; gap: 9px;
-  padding: 15px 0 17px;
+/* power switch, on the top edge where a switch belongs */
+.hh-topbar { display: flex; justify-content: flex-start; padding: 0 2px 14px; }
+.hh-switch {
+  display: flex; align-items: center; gap: 7px;
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-family: var(--mono); font-size: 7.5px; letter-spacing: 0.16em;
+  color: var(--bone-dim);
 }
-.hh-wordmark b {
-  font-family: var(--display); font-size: 19px; font-weight: 700;
-  letter-spacing: 0.05em; font-style: italic; color: var(--bone);
+.sw-track {
+  position: relative; width: 42px; height: 16px; border-radius: 9px;
+  background: linear-gradient(180deg, #100e0d, #1d1a17);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.75);
 }
-.hh-wordmark span {
-  font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.2em;
-  color: var(--ember);
+.sw-knob {
+  position: absolute; top: 2px; left: 22px; width: 18px; height: 12px;
+  border-radius: 7px;
+  background: linear-gradient(180deg, #4a443c, #2c2825);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.07), 0 2px 4px rgba(0,0,0,0.5);
+  transition: left 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hh-switch:hover .sw-knob { background: linear-gradient(180deg, #575046, #34302c); }
+.sw-on { color: var(--ember); transition: color 0.3s; }
+.sw-off { transition: color 0.3s; }
+#handheld.off .sw-knob { left: 2px; }
+#handheld.off .sw-on { color: var(--bone-dim); }
+#handheld.off .sw-off { color: var(--bone); }
+
+/* a dead screen: no glow, just glass */
+#handheld.off #hh-screen {
+  background: linear-gradient(150deg, #14120f 0%, #0d0b09 46%, #131110 100%);
+  text-shadow: none;
+}
+#handheld.off .hh-led { background: #3a2320; box-shadow: none; animation: none; }
+#handheld.off .hh-bezel-label { opacity: 0.35; }
+#handheld.off .hh-dpad, #handheld.off .hh-ab, #handheld.off .hh-pills {
+  opacity: 0.55; pointer-events: none;
+}
+
+/* the tube warming up */
+.scr-bootline {
+  position: absolute; inset: 0; margin: auto;
+  width: 82%; height: 2px; background: var(--scr-ink);
+  box-shadow: 0 0 14px var(--scr-ink);
+  animation: boot-open 0.62s ease-out forwards;
+}
+@keyframes boot-open {
+  0%   { transform: scaleX(0.02) scaleY(1); opacity: 0; }
+  22%  { transform: scaleX(1) scaleY(1); opacity: 1; }
+  100% { transform: scaleX(1) scaleY(58); opacity: 0.12; }
 }
 
 /* controls */
-.hh-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.hh-controls {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding-top: 30px;
+}
 .hh-dpad {
   position: relative; width: 108px; height: 108px; flex-shrink: 0;
   display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr);
