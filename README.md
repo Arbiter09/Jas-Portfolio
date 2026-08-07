@@ -2,6 +2,8 @@
 
 A personal portfolio built to feel like a workshop kept after hours: dark, deliberate, and quiet, with exactly one piece of spectacle per section and no more. The visual language borrows from Souls games and Bloodborne (bonfire shrines, wax seals, fog gates, item pickup banners), but the restraint is the point. It should read as a site kept by someone who ships quietly, not as a theme park.
 
+**Live at [arbiter09.github.io/Jas-Portfolio](https://arbiter09.github.io/Jas-Portfolio/)**
+
 Built with Vite, Three.js, and vanilla JavaScript. No UI framework, no component library, no state management library, no CSS framework.
 
 ```bash
@@ -206,9 +208,24 @@ All content lives in plain data structures at the top of each module. There is n
 
 ## Deploying
 
-`npm run build` produces a fully static `dist/` with no server requirement. It works on any static host: GitHub Pages, Netlify, Vercel, Cloudflare Pages, or an S3 bucket.
+The site is live at **https://arbiter09.github.io/Jas-Portfolio/** and redeploys automatically.
 
-Note that `dist/` is gitignored, so if you deploy from this repository you want a build step in CI rather than a committed build output. For GitHub Pages that means an action that runs `npm ci && npm run build` and publishes `dist/`. If the site will be served from a subpath rather than a domain root, set `base` in a `vite.config.js` to match.
+`.github/workflows/deploy.yml` runs on every push to `main`. It installs with `npm ci`, builds, and publishes `dist/` as a GitHub Pages artifact. Nothing needs to be configured in the repository settings, because `actions/configure-pages` runs with `enablement: true` and switches Pages on by itself. You can also trigger a deploy by hand from the Actions tab, since the workflow declares `workflow_dispatch`.
+
+`dist/` is gitignored on purpose. The build output is produced in CI rather than committed, so the repository only ever holds source.
+
+### The subpath gotcha
+
+Pages serves this repository from `/Jas-Portfolio/` rather than a domain root, which breaks any URL written with a leading slash. Two things handle that:
+
+- `vite.config.js` sets `base: '/Jas-Portfolio/'`, which rewrites every bundled asset URL at build time.
+- Anything pointing at a file in `public/` builds its path from `import.meta.env.BASE_URL`. The resume links in `contact.js` and `terminal.js` do this. Written as `/resume.pdf` they would resolve to the domain root and 404 in production while working perfectly in development, which is a genuinely annoying bug to catch late.
+
+If you fork this under a different repository name, change `base` to match, or set it to `'/'` for a custom domain or a `username.github.io` repository.
+
+### Hosting it elsewhere
+
+`npm run build` produces a fully static `dist/` with no server requirement, so Netlify, Vercel, Cloudflare Pages, or an S3 bucket all work. For any host serving from a domain root, set `base` back to `'/'` first.
 
 ## Performance
 
