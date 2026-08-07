@@ -210,9 +210,11 @@ All content lives in plain data structures at the top of each module. There is n
 
 The site is live at **https://arbiter09.github.io/Jas-Portfolio/** and redeploys automatically.
 
-`.github/workflows/deploy.yml` runs on every push to `main`. It installs with `npm ci`, builds, and publishes `dist/` as a GitHub Pages artifact. Nothing needs to be configured in the repository settings, because `actions/configure-pages` runs with `enablement: true` and switches Pages on by itself. You can also trigger a deploy by hand from the Actions tab, since the workflow declares `workflow_dispatch`.
+`.github/workflows/deploy.yml` runs on every push to `main`. It installs with `npm ci`, builds, and force-pushes the contents of `dist/` to the `gh-pages` branch, which is what Pages serves. You can also trigger it by hand from the Actions tab, since the workflow declares `workflow_dispatch`.
 
-`dist/` is gitignored on purpose. The build output is produced in CI rather than committed, so the repository only ever holds source.
+`dist/` is gitignored on the `main` branch on purpose. Build output is produced in CI rather than committed, so `main` only ever holds source. The `gh-pages` branch holds nothing but generated files and is safe to treat as disposable.
+
+A note on why it publishes to a branch rather than using the newer Pages artifact flow: that flow needs the repository's Pages source set to "GitHub Actions", and `actions/configure-pages` could not switch that on with the default workflow token. Pushing a `gh-pages` branch enables Pages on its own and needs no repository settings at all.
 
 ### The subpath gotcha
 
