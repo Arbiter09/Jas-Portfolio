@@ -1,6 +1,6 @@
 import './style.css';
 import { initHero } from './hero.js';
-import { initDesktop } from './desktop.js';
+import { initHandheld } from './handheld.js';
 import { initExperience } from './experience.js';
 import { initShiplog } from './shiplog.js';
 import { initTerminal } from './terminal.js';
@@ -96,7 +96,7 @@ window.addEventListener('scroll', () => {
 
 // ---------- ember sparks on press ----------
 document.addEventListener('pointerdown', (e) => {
-  const btn = e.target.closest('.ember-btn, .nav-tab, .sw-btn, .task-scroll, .desk-icon');
+  const btn = e.target.closest('.ember-btn, .nav-tab, .hh-round, .hh-pill, .dp');
   if (!btn) return;
   for (let i = 0; i < 7; i++) {
     const s = document.createElement('div');
@@ -113,7 +113,7 @@ document.addEventListener('pointerdown', (e) => {
 
 // ---------- init sections ----------
 initHero();
-initDesktop();
+initHandheld();
 initExperience();
 initShiplog();
 initTerminal(navigateTo);

@@ -58,7 +58,7 @@ index.html          markup for all six tabs, plus the raven and perch SVGs
 src/
   main.js           tab router, rune underline, typing effect, souls counter, ember sparks
   hero.js           the Three.js shrine scene
-  desktop.js        the Projects workbench, windows, and the crow
+  handheld.js       the Projects handheld: menu, detail views, digit lock
   experience.js     the pilgrim's road and its milestone data
   terminal.js       the shell, its filesystem, easter eggs, and the rune game
   shiplog.js        weekend commit entries
@@ -87,13 +87,15 @@ Over the top: the name in an engraved stone gradient, and a typing effect that c
 
 The scene stops rendering entirely when scrolled out of view, via `IntersectionObserver`.
 
-### Projects, the workbench
+### Projects, the workbench handheld
 
-A candlelit desktop of wax sealed folders. Hovering makes a seal creak (a rotation easing, not a wiggle) and summons a caption from a bored crow familiar who is not impressed by any of it. Double clicking breaks the seal and unfurls a scroll window.
+A small console found in a drawer, and the whole section runs on it. The D-pad moves a pixel caret through the project list, A opens a work, B backs out, and left and right flip between projects once you are inside one. The description box under the menu carries the crow's line for whatever is highlighted, the way a creature entry would.
 
-Windows are draggable by their title bar, resizable from the corner grip, focus by z-index on pointer down, and minimize into the taskbar as sealed scrolls. Each holds a description, an architecture diagram styled as a scrying chart, a preview pane, tech stack chips rendered as small sigils, and links.
+The screen is amber phosphor on obsidian rather than the classic green LCD, because ember is the only accent this site allows itself. Both colors are CSS variables at the top of the handheld block in `style.css`, so swapping to `#9bbc0f` on `#0f380f` is a two line change.
 
-The fifth folder is a locked chest guarded by a riddle. The answer is the number of LeetCode problems solved, and the accepted range is 300 to 400. It is the same number the souls counter on the home page ticks to, which is the only hint offered.
+The fifth entry is sealed. Opening it gives you a three digit lock: up and down change a digit, left and right move between them, A tries the combination. The answer is the number of LeetCode problems solved, which is the same number the souls counter on the shrine ticks to. A wrong code shakes the screen and keeps the seal shut.
+
+SELECT toggles sound, off by default. When on, each press gets a short square wave blip from the Web Audio API. Everything is keyboard playable too: arrow keys, Z or Enter for A, X for B.
 
 ### Experience, the pilgrim's road
 
@@ -196,7 +198,7 @@ All content lives in plain data structures at the top of each module. There is n
 
 | To change | Edit |
 | --- | --- |
-| Projects, crow captions, diagrams, riddle | `projects` array in `src/desktop.js` |
+| Projects, crow captions, stacks, riddle | `projects` array in `src/handheld.js` |
 | Roles, dates, bullets, badges, cities | `milestones` array in `src/experience.js` |
 | Weekend builds and streak | `entries` array in `src/shiplog.js`, streak in `index.html` |
 | Contact links and their captions | `dispatches` array in `src/contact.js` |
@@ -251,7 +253,8 @@ Stated plainly rather than glossed over:
 - **The 3D scene is not described to screen readers.** The canvas is decorative and unlabeled. Purely ornamental elements (the raven, the perch, the banner, the feathers) are correctly marked `aria-hidden`, but the hero itself deserves a text alternative.
 - **The window manager is pointer first.** Dragging and resizing scroll windows requires a pointer. Folders open on a single tap on touch devices, but windows cannot be moved by keyboard.
 - **Mobile drops the road illustration.** Below 760 pixels the milestone cards stack full width and the path and its dots are hidden rather than redrawn vertically.
-- **Project links are partly placeholders.** Several repository and demo URLs in `desktop.js` still point at `#` or at repositories that may not be public.
+- **Project links point at the GitHub profile, not individual repositories.** `handheld.js` links every project to `github.com/Arbiter09` because the per-project repository URLs are not recorded anywhere yet. Swap in the real ones.
+- **ETHDenver has no tech stack listed.** The resume does not record one, so the field is deliberately left empty rather than invented.
 
 ---
 
