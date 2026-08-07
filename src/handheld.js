@@ -75,7 +75,7 @@ const projects = [
   },
 ];
 
-const BODY_STEP = 26; // pixels the D-pad scrolls a detail pane per press
+const BODY_STEP = 34; // pixels the D-pad scrolls a detail pane per press
 
 export function initHandheld() {
   const screen = document.getElementById('hh-screen');
