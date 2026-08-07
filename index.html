@@ -89,16 +89,53 @@
     <section class="page" id="page-projects" data-page="projects">
       <div class="page-head">
         <h2 class="section-title">The Workbench</h2>
-        <p class="section-sub">Double-click a seal to break it. The crow has opinions.</p>
+        <p class="section-sub">A handheld found in the drawer. It still has a charge.</p>
       </div>
-      <div id="desktop">
-        <div id="desktop-icons"></div>
-        <div id="crow-caption" aria-live="polite"></div>
-        <div id="window-layer"></div>
-        <div id="taskbar">
-          <span class="taskbar-label">sealed scrolls —</span>
-          <div id="taskbar-items"></div>
+
+      <div id="handheld">
+        <div class="hh-shell">
+          <div class="hh-bezel">
+            <div class="hh-bezel-top">
+              <span class="hh-groove"></span>
+              <span class="hh-bezel-label">DOT MATRIX WITH EMBER GLOW</span>
+              <span class="hh-groove"></span>
+            </div>
+            <div class="hh-screen-wrap">
+              <span class="hh-power"><span class="hh-led"></span>POWER</span>
+              <div id="hh-screen" role="application" aria-label="Project browser" tabindex="0"></div>
+            </div>
+          </div>
+
+          <div class="hh-wordmark"><b>JAS SHAH</b><span>PROJECTS</span></div>
+
+          <div class="hh-controls">
+            <div class="hh-dpad">
+              <button class="dp dp-up" data-btn="up" aria-label="Up"></button>
+              <button class="dp dp-left" data-btn="left" aria-label="Left"></button>
+              <span class="dp-mid"></span>
+              <button class="dp dp-right" data-btn="right" aria-label="Right"></button>
+              <button class="dp dp-down" data-btn="down" aria-label="Down"></button>
+            </div>
+            <div class="hh-ab">
+              <button class="hh-round" data-btn="b" aria-label="B, back">B</button>
+              <button class="hh-round" data-btn="a" aria-label="A, confirm">A</button>
+            </div>
+          </div>
+
+          <div class="hh-pills">
+            <button class="hh-pill" data-btn="select" aria-label="Select, toggles sound">SELECT</button>
+            <button class="hh-pill" data-btn="start" aria-label="Start">START</button>
+          </div>
+
+          <div class="hh-speaker" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
         </div>
+
+        <p class="hh-hint">
+          <b>D-pad</b> to move · <b>A</b> opens · <b>B</b> backs out · <b>SELECT</b> toggles sound
+          <br><span>Keyboard: arrow keys, <kbd>Z</kbd>/<kbd>Enter</kbd> for A, <kbd>X</kbd> for B</span>
+        </p>
       </div>
     </section>
 

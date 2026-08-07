@@ -25,35 +25,47 @@ export function initTerminal(navigateTo) {
   const files = {
     'experience.md': `<span class="gold"># experience.md</span>
 
-<span class="warm">## Software Developer (Research)</span> — Stony Brook University <span class="dim">(2024–present)</span>
-- 5,000+ MCMC simulation runs orchestrated on Seawulf HPC
-- scheduling + checkpointing layer in Python/C++
+<span class="warm">## Software Developer (Research)</span> — Stony Brook University <span class="dim">(Aug 2025–present)</span>
+- Fair Representation Act rules translated into a graph-based gluing
+  algorithm: contiguity, compactness, proportional seats via BFS, 50 states
+- 5,000+ MCMC ensemble simulations (MGGG GerryChain) on Seawulf HPC;
+  Slurm scheduling lifted throughput 35%
 
-<span class="warm">## Software Developer Intern</span> — Good Ai, SF <span class="dim">(remote, 2023)</span>
-- SQS + Kinesis event pipeline, multi-million-event days
-- idempotent consumers, dead-letter replay tooling
+<span class="warm">## Software Developer Intern</span> — Good Ai, San Francisco <span class="dim">(remote, Jul 2025–Jun 2026)</span>
+- AWS SQS + Kinesis event pipeline, least-privilege IAM across 6 consumers,
+  200K+ events/day at sub-150ms lag
+- 30+ reusable React + TypeScript components, WCAG 2.1, 95%+ Vitest coverage
+- OpenTelemetry + Prometheus/Grafana across 5+ services, MTTD down 35%
 
-<span class="warm">## MS, Data Science</span> — Stony Brook University <span class="dim">(2022–2024)</span>
+<span class="warm">## MS, Data Science</span> <span class="dim">(CS track)</span> — Stony Brook University <span class="dim">(Aug 2024–May 2026)</span>
+- GPA 3.73/4.00, top 10%
 
-<span class="warm">## Software Developer Intern</span> — Kotton King, Singapore <span class="dim">(remote, 2022)</span>
-- p95 API latency cut 40%
+<span class="warm">## Software Developer Intern</span> — Kotton King, Singapore <span class="dim">(remote, Mar 2024–Aug 2024)</span>
+- Java/Spring Boot + PostgreSQL: response latency down 40%, 10K+ daily requests
+- 8 endpoints hardened against SQL injection; fixed-window rate limiting
+- Webhook-driven CI/CD (Actions, Docker, K8s): deploys 20% faster, 3 services
 
-<span class="warm">## B.E., Information Technology</span> — University of Mumbai <span class="dim">(2018–2022)</span> · top-10% GPA`,
+<span class="warm">## B.E., Information Technology</span> — University of Mumbai <span class="dim">(Aug 2020–Jun 2024)</span> · GPA 9.2/10`,
     'skills.json': `{
-  <span class="warm">"languages"</span>: ["Python", "TypeScript", "C++", "SQL", "Solidity"],
-  <span class="warm">"agents"</span>: ["Claude API", "LangGraph", "MCP", "tool design", "evals"],
-  <span class="warm">"data"</span>: ["PySpark", "Airflow", "Kinesis", "SQS", "Postgres", "Pinecone"],
-  <span class="warm">"serving"</span>: ["FastAPI", "Docker", "AWS", "HPC/Slurm"],
-  <span class="warm">"misc"</span>: ["candle maintenance", "crow diplomacy", <span class="gold">"shipping on Sundays"</span>]
+  <span class="warm">"ai_ml"</span>:     ["Claude API", "MCP", "LangChain", "DSPy", "PyTorch",
+                "HuggingFace Transformers", "scikit-learn", "LoRA fine-tuning"],
+  <span class="warm">"languages"</span>: ["Python", "C/C++", "Java", "Go", "JavaScript", "TypeScript", "SQL", "Bash"],
+  <span class="warm">"data_cloud"</span>:["AWS (EC2, RDS, S3, IAM)", "GCP", "Databricks", "Spark",
+                "Kafka", "PostgreSQL", "Redis", "MongoDB"],
+  <span class="warm">"backend"</span>:   ["FastAPI", "Spring Boot", "REST", "GraphQL", "gRPC",
+                "Docker", "Kubernetes", "CI/CD", "OpenTelemetry"],
+  <span class="warm">"frontend"</span>:  ["React", "Next.js", "Redux Toolkit", "Tailwind", "Vitest", "WCAG 2.1"],
+  <span class="warm">"misc"</span>:      ["candle maintenance", "crow diplomacy", <span class="gold">"shipping on Sundays"</span>]
 }`,
-    'grind.txt': `leetcode: 300+ solved. the chest in Projects knows the number.`,
+    'grind.txt': `leetcode: 300+ solved (hard/medium). graphs, DP, advanced data structures.
+the sealed chest on the handheld knows the number.`,
   };
 
-  const projectsLs = `<span class="gold">papermind/</span>   research copilot — LangGraph · Claude · Pinecone
-<span class="gold">devmind/</span>     codebase agent — MCP · −38% token spend
-<span class="gold">moviepulse/</span>  ratings forecaster — RMSE 0.84
-<span class="gold">ethdenver/</span>   2nd place · $3,000 USDC · 36 hours
-<span class="warm">chest.lock</span>   sealed — see Projects tab, bring a number`;
+  const projectsLs = `<span class="gold">papermind/</span>   multi-agent research assistant · 87% answer relevance
+<span class="gold">devmind/</span>     code review agent · MCP · −38% token spend
+<span class="gold">moviepulse/</span>  hybrid recommender · RMSE 0.85 · 7.7x faster inference
+<span class="gold">ethdenver/</span>   decentralized audio attribution · 2nd place · $3,000 USDC
+<span class="warm">chest.lock</span>   sealed — boot the handheld in Projects, bring a number`;
 
   const commands = {
     help: () => `<span class="gold">the archive responds to:</span>
