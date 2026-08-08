@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jas Shah — forged on weekends</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,600;1,400&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕯️</text></svg>">
+  <script type="module" crossorigin src="/Jas-Portfolio/assets/index-CMpA8HpC.js"></script>
+  <link rel="stylesheet" crossorigin href="/Jas-Portfolio/assets/index-CvN-wJee.css">
+</head>
+<body>
+  <div id="grain"></div>
+
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a class="nav-sigil" href="#home" data-tab="home" title="the bench">
+        <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true">
+          <path d="M16 3 L16 22 M12 8 L20 8 M13 22 L19 22 M16 22 L16 27 M13 27 a3 3 0 0 0 6 0"
+                fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="16" cy="5" r="1.4" fill="currentColor"/>
+        </svg>
+      </a>
+      <div class="nav-tabs" role="tablist">
+        <button class="nav-tab active" data-tab="home">Home</button>
+        <button class="nav-tab" data-tab="projects">Projects</button>
+        <button class="nav-tab" data-tab="experience">Experience</button>
+        <button class="nav-tab" data-tab="terminal">Terminal</button>
+        <button class="nav-tab" data-tab="shiplog">Ship Log</button>
+        <button class="nav-tab" data-tab="contact">Contact</button>
+        <div id="rune-underline"><div class="rune-trace"></div></div>
+      </div>
+    </div>
+  </nav>
+
+  <main id="pages">
+
+    <!-- ============ HOME ============ -->
+    <section class="page active" id="page-home" data-page="home">
+      <div id="hero">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-veil"></div>
+        <div class="hero-text">
+          <p class="hero-pre">a workshop, kept after hours</p>
+          <h1 class="hero-name">JAS&nbsp;SHAH</h1>
+          <p class="hero-line">I build things on weekends.</p>
+          <div class="hero-role">
+            <span class="role-caret">›</span>
+            <span id="role-type"></span><span class="type-cursor">▌</span>
+          </div>
+        </div>
+        <div id="acquire-banner" aria-hidden="true">
+          <div class="acquire-inner">
+            <span class="acquire-label">You have acquired:</span>
+            <span class="acquire-item" id="acquire-item">Agent Builder</span>
+          </div>
+        </div>
+        <div id="souls-counter" title="one per problem. no shortcuts.">
+          <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><circle cx="8" cy="8" r="3.5" fill="currentColor" opacity="0.9"/><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.45"/></svg>
+          <span id="souls-value">0</span>
+        </div>
+        <div class="hero-scroll-hint">
+          <span>descend</span>
+          <div class="scroll-line"></div>
+        </div>
+      </div>
+
+      <div class="home-below">
+        <div class="prose">
+          <h2 class="section-title">The keeper of this bench</h2>
+          <p>Backend engineer by trade, agent builder by compulsion. I spend my weeks in
+          data pipelines and my weekends teaching language models to behave. Currently a
+          Software Developer (Research) at Stony Brook University — before that, two remote
+          internships, one master's degree, and an unreasonable number of chai refills.</p>
+          <p>Everything on this desk was shipped, not staged. Open the folders. Try the terminal.
+          The crow will judge you either way.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROJECTS ============ -->
+    <section class="page" id="page-projects" data-page="projects">
+      <div class="page-head">
+        <h2 class="section-title">The Workbench</h2>
+        <p class="section-sub">A handheld found in the drawer. It still has a charge.</p>
+      </div>
+
+      <div id="handheld">
+        <div class="hh-shell">
+          <div class="hh-topbar">
+            <button id="hh-power" class="hh-switch" role="switch" aria-checked="true" aria-label="Power">
+              <span class="sw-off">OFF</span>
+              <span class="sw-track"><span class="sw-knob"></span></span>
+              <span class="sw-on">ON</span>
+            </button>
+            <span class="hh-power"><span class="hh-led"></span>POWER</span>
+          </div>
+          <div class="hh-bezel">
+            <div class="hh-bezel-top">
+              <span class="hh-groove"></span>
+              <span class="hh-bezel-label">DOT MATRIX WITH EMBER GLOW</span>
+              <span class="hh-groove"></span>
+            </div>
+            <div class="hh-screen-wrap">
+              <div id="hh-screen" role="application" aria-label="Project browser" tabindex="0"></div>
+            </div>
+          </div>
+
+          <div class="hh-controls">
+            <div class="hh-dpad">
+              <button class="dp dp-up" data-btn="up" aria-label="Up"></button>
+              <button class="dp dp-left" data-btn="left" aria-label="Left"></button>
+              <span class="dp-mid"></span>
+              <button class="dp dp-right" data-btn="right" aria-label="Right"></button>
+              <button class="dp dp-down" data-btn="down" aria-label="Down"></button>
+            </div>
+            <div class="hh-ab">
+              <button class="hh-round" data-btn="b" aria-label="B, back">B</button>
+              <button class="hh-round" data-btn="a" aria-label="A, confirm">A</button>
+            </div>
+          </div>
+
+          <div class="hh-pills">
+            <button class="hh-pill" data-btn="select" aria-label="Select, toggles sound">SELECT</button>
+            <button class="hh-pill" data-btn="start" aria-label="Start">START</button>
+          </div>
+
+          <div class="hh-speaker" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+
+        <p class="hh-hint">
+          <b>D-pad</b> to move · <b>A</b> opens · <b>B</b> backs out · <b>SELECT</b> toggles sound
+          <br><span>Keyboard: arrow keys, <kbd>Z</kbd>/<kbd>Enter</kbd> for A, <kbd>X</kbd> for B. The switch up top cuts the power.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ EXPERIENCE ============ -->
+    <section class="page" id="page-experience" data-page="experience">
+      <div class="page-head">
+        <h2 class="section-title">The Pilgrim's Road</h2>
+        <p class="section-sub">Mumbai → Singapore (outpost) → New York → San Francisco (outpost) → New York. Still walking.</p>
+      </div>
+      <div id="road"></div>
+    </section>
+
+    <!-- ============ TERMINAL ============ -->
+    <section class="page" id="page-terminal" data-page="terminal">
+      <div class="page-head">
+        <h2 class="section-title">The Hatch</h2>
+        <p class="section-sub">A real shell down to the archive. Try <code>help</code>, or don't.</p>
+      </div>
+      <div id="term-shell">
+        <div class="term-titlebar">
+          <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
+          <span class="term-title">jas@thebench: ~/archive</span>
+        </div>
+        <div id="term-screen">
+          <div id="term-output"></div>
+          <div class="term-input-row">
+            <span class="term-prompt">jas@thebench:~$</span>
+            <input id="term-input" type="text" autocomplete="off" spellcheck="false" aria-label="terminal input" />
+          </div>
+        </div>
+        <div class="term-scanlines" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- ============ SHIP LOG ============ -->
+    <section class="page" id="page-shiplog" data-page="shiplog">
+      <div class="page-head">
+        <h2 class="section-title">Ship Log</h2>
+        <p class="section-sub">Weekend commits, wax-stamped. <span id="streak-line">consecutive weekends at the bench: <b>6</b></span></p>
+      </div>
+      <div id="shiplog-entries"></div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="page" id="page-contact" data-page="contact">
+      <div id="contact-scene">
+        <svg id="flight-svg" aria-hidden="true">
+          <path id="flight-base" d=""/>
+          <path id="flight-line" d=""/>
+        </svg>
+
+        <div id="perch" aria-hidden="true">
+          <svg viewBox="0 0 170 70" width="170" height="70">
+            <path d="M170 54 C140 44, 110 34, 74 30 C56 28, 34 25, 14 22"
+                  fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            <path d="M112 35 l-7 -11 M105 24 l-6 -4 M52 27 l-8 -12 M52 27 l-11 -4 M30 24 l-5 -10"
+                  fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M44 15 q5 -6 11 -3 q-4 6 -11 3 Z M25 14 q5 -6 11 -3 q-4 6 -11 3 Z"
+                  fill="currentColor" opacity="0.5"/>
+          </svg>
+        </div>
+
+        <div id="raven" class="perched" aria-hidden="true">
+          <svg viewBox="0 0 140 96" width="70" height="48">
+            <g class="r-legs">
+              <path d="M62 62 l-2 10 M62 72 l-5 3 M62 72 l5 2 M74 62 l1 10 M75 72 l-5 3 M75 72 l5 2"
+                    fill="none" stroke="#191715" stroke-width="2" stroke-linecap="round"/>
+            </g>
+            <path class="r-tail" d="M36 48 L2 34 L9 49 L2 64 L37 56 Z"/>
+            <ellipse class="r-body" cx="64" cy="51" rx="31" ry="13.5"/>
+            <path class="r-head" d="M87 45 C92 34, 105 31, 112 37 C117 42, 114 49, 107 51 L97 53 C91 53, 87 50, 87 45 Z"/>
+            <path class="r-beak" d="M111 38 L136 43 L110 48 Z"/>
+            <circle class="r-eye" cx="105" cy="41" r="1.9"/>
+            <g class="r-wing r-wing-back"><path d="M60 45 C49 19, 76 5, 95 12 C79 21, 70 33, 67 47 Z"/></g>
+            <g class="r-wing r-wing-front"><path d="M58 47 C45 21, 72 6, 92 14 C76 25, 67 36, 64 49 Z"/></g>
+          </svg>
+        </div>
+
+        <div class="page-head contact-head">
+          <h2 class="section-title">Send a Raven</h2>
+          <p class="section-sub">It is patient. It has waited through worse.</p>
+          <p class="contact-scroll-cue"><span>scroll — it will follow</span></p>
+        </div>
+
+        <div id="dispatches"></div>
+
+        <div id="altar">
+          <div class="altar-inner">
+            <p class="altar-line">The bird is rested. Give it somewhere to go.</p>
+            <button id="release-raven" class="ember-btn">Release the Raven</button>
+            <p class="altar-note" id="altar-note">Response time: faster than a boss respawn. Usually.</p>
+          </div>
+        </div>
+
+        <div id="feather-layer" aria-hidden="true"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>forged on a Sunday, fueled by chai and stubbornness</span>
+    <span class="footer-sep">·</span>
+    <span class="footer-mono">no frameworks were harmed · three.js &amp; vanilla everything</span>
+  </footer>
+
+  <div id="fog-transition" aria-hidden="true"></div>
+
+</body>
+</html>
