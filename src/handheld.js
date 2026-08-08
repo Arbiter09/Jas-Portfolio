@@ -93,6 +93,18 @@ const categories = [
         link: GH,
       },
       {
+        name: 'NEURALSERVE',
+        tag: 'fine-tune + serving',
+        crow: 'He made an 8-billion-parameter model 98.6% less work to train. The other 1.4% took a week.',
+        lines: [
+          'Fine-tuned LLaMA 3.1 8B on a 12K-sample instruction dataset using LoRA at rank 16 with PyTorch and HuggingFace PEFT, cutting trainable parameters by 98.6% while improving ROUGE-L from 0.29 to 0.41 over the frozen baseline.',
+          'A batched inference server in FastAPI with dynamic request batching and Redis-backed KV-cache eviction, sustaining 180 req/min at p95 latency under 420ms on a single AWS EC2 g4dn.xlarge instance.',
+          'The serving pipeline is instrumented with OpenTelemetry and a Prometheus and Grafana dashboard tracking token throughput, GPU utilization and cache hit rate across 3 model versions, to catch latency regressions early.',
+        ],
+        stack: ['PyTorch', 'LoRA', 'HuggingFace', 'FastAPI', 'Redis', 'Docker', 'AWS EC2'],
+        link: GH,
+      },
+      {
         name: 'MOVIEPULSE',
         tag: 'recommender',
         crow: 'An RMSE of 0.85. To predict whether humans like explosions. Groundbreaking.',
