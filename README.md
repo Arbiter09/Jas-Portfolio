@@ -89,11 +89,9 @@ The scene stops rendering entirely when scrolled out of view, via `IntersectionO
 
 ### Projects, the workbench handheld
 
-A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Web3, and one sealed folder, each showing how many works it holds), then the works inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
+A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Web3 and The Grind, each showing how many works it holds), then the works inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
 
 The screen is amber phosphor on obsidian rather than the classic green LCD, because ember is the only accent this site allows itself. Both colors are CSS variables at the top of the handheld block in `style.css`, so swapping to `#9bbc0f` on `#0f380f` is a two line change.
-
-The last folder is sealed: it shows a lock instead of a folder icon and a question mark instead of a count. Opening it gives you a three digit combination lock, where up and down change a digit, left and right move between them, and A tries it. The answer is the number of LeetCode problems solved, which is the same number the souls counter on the shrine ticks to. A wrong code shakes the screen and keeps the seal shut.
 
 A slide switch on the top edge cuts the power, with the red POWER lamp beside it. Off means a genuinely dead device: the screen goes to bare glass, the red LED goes out, and the controls stop responding. Switching back on runs a short CRT warm-up, a line opening out of the middle, before the menu returns.
 
@@ -200,7 +198,7 @@ All content lives in plain data structures at the top of each module. There is n
 
 | To change | Edit |
 | --- | --- |
-| Folders, projects, crow captions, stacks, riddle | `categories` array in `src/handheld.js` |
+| Folders, projects, crow captions, stacks | `categories` array in `src/handheld.js` |
 | Roles, dates, bullets, badges, cities | `milestones` array in `src/experience.js` |
 | Weekend builds and streak | `entries` array in `src/shiplog.js`, streak in `index.html` |
 | Contact links and their captions | `dispatches` array in `src/contact.js` |

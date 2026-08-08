@@ -329,21 +329,6 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   border: 1px solid rgba(240,169,78,0.35); border-radius: 2px; color: var(--scr-ink);
 }
 
-.scr-lock { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 13px; }
-.scr-lock.wrong { animation: shake 0.42s ease; }
-.scr-riddle { font-size: 0.86em; line-height: 1.6; text-align: center; opacity: 0.85; }
-.scr-digits { display: flex; gap: 10px; }
-.scr-digit {
-  width: 2em; height: 2.6em; display: grid; place-items: center;
-  font-size: 1.55em; border: 1px solid rgba(240,169,78,0.28);
-  border-radius: 2px; color: var(--scr-dim);
-}
-.scr-digit.on {
-  color: var(--scr-ink); border-color: var(--scr-ink);
-  box-shadow: 0 0 12px rgba(240,169,78,0.28);
-}
-.scr-digit-hint { font-size: 0.62em; letter-spacing: 0.15em; color: var(--scr-dim); }
-
 .scr-foot {
   display: flex; justify-content: space-between; gap: 10px; flex-shrink: 0;
   font-size: 0.63em; letter-spacing: 0.12em; color: var(--scr-dim);
@@ -501,7 +486,6 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   padding: 1px 5px; color: var(--bone);
 }
 
-@keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 
 @media (max-width: 480px) {
   .hh-shell { padding: 16px 16px 20px; }
