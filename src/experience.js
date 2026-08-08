@@ -67,7 +67,7 @@ const milestones = [
     current: true,
     bullets: [
       'Translated Fair Representation Act requirements into a graph-based gluing algorithm enforcing contiguity, compactness, and proportional seat allocation via BFS across all 50 states.',
-      'Ran 5,000+ Monte Carlo Markov Chain ensemble simulations with MGGG GerryChain on the Seawulf HPC cluster; Slurm scheduling lifted throughput 35%.',
+      'Ran 5,000+ Monte Carlo Markov Chain ensemble simulations with MGGG GerryChain on the Seawulf HPC cluster; Slurm scheduling and a migration to AWS EC2 Spot instances lifted throughput 35% while cutting compute costs 28%.',
     ],
   },
 ];

@@ -1,77 +1,144 @@
-// The workbench handheld: a small console found in a drawer. D-pad browses the
-// projects, A opens, B backs out. The crow's line lives in the description box,
-// the way a creature entry would.
+// The workbench handheld: a small console found in a drawer.
+// Folders first, then works inside them. D-pad browses, A opens, B backs out.
+// The crow's line lives in the description box, the way a creature entry would.
 
 const GH = 'https://github.com/Arbiter09';
 
-const projects = [
+const categories = [
   {
-    id: 'papermind',
-    name: 'PAPERMIND',
-    tag: 'research copilot',
-    crow: 'It reads the papers so he can pretend he did.',
-    lines: [
-      'A multi-agent research assistant on LangGraph: planner, retriever and critic agents answering multi-hop questions over academic corpora.',
-      '87% answer relevance on a 200-question arXiv CS evaluation set.',
-      'The RAG pipeline ingests 3,000+ arXiv PDFs into Pinecone with hybrid retrieval (dense plus BM25 reranking), dropping the hallucination rate from 31% to 9% on factual citation queries.',
-      'A critic node scores retrieved context against the query before generation and re-retrieves when confidence falls below threshold, cutting low-confidence responses 43%.',
+    id: 'systems',
+    name: 'DISTRIBUTED SYSTEMS',
+    short: 'SYSTEMS',
+    crow: 'Machines that cannot agree, taught to agree. Slowly, and in C++.',
+    projects: [
+      {
+        name: 'MULTIPAXOSDB',
+        tag: 'consensus store',
+        crow: '10,081 transactions a second, up from 38. He will tell you the number again.',
+        lines: [
+          'A fault-tolerant distributed transaction system in C++ across 9 servers and 3 shards, implementing Multi-Paxos log replication and Two-Phase Commit over asynchronous gRPC on a single-threaded event loop.',
+          'Crash recovery via Paxos ballot persistence and WAL replay. A duplicate-balance bug (474 duplicates) was fixed with idempotency guards, verified to exact 30,000/30,000 conservation under concurrent recovery.',
+          'Transaction throughput increased 272x to a mean 10,081 TPS, up from 38, by diagnosing single-transaction batching bottlenecks and generating concurrent workloads across all 3 shard leaders.',
+        ],
+        stack: ['C++', 'Multi-Paxos', '2PC', 'gRPC', 'LevelDB'],
+        link: GH,
+      },
+      {
+        name: 'ARMFORGE',
+        tag: 'bare metal OS',
+        crow: 'He wrote an operating system for a computer that does not exist.',
+        lines: [
+          'An open-source AArch64 kernel on QEMU, extended with a fixed-priority RTOS scheduler implementing rate-monotonic scheduling, periodic tasks, mutexes, semaphores, priority inheritance and POSIX signals. 4 microsecond WCRT with zero deadline misses.',
+          'A PL011 UART driver with interrupt-driven receive, a 256-byte ring buffer, CRC-framed protocol and ACK/NACK retransmission, exposed as a Unix character device at 0.32ms mean round trip.',
+          'An eBPF/XDP network monitor using libbpf CO-RE in SKB mode, classifying guest traffic into BPF map counters and ring-buffer events. Verified on AWS EC2 Graviton2 capturing 10/10 ICMP packets.',
+        ],
+        stack: ['C', 'AArch64', 'QEMU', 'RTOS', 'eBPF/XDP', 'libbpf'],
+        link: GH,
+      },
+      {
+        name: 'KV STORE',
+        tag: 'in-memory engine',
+        crow: '836,183 operations a second, to store things he will forget by Tuesday.',
+        lines: [
+          'A Redis-compatible storage engine in C++17 with kqueue/epoll I/O, mmap persistence and a CRC-32 WAL, reaching 836,183 ops/s on loopback. Validated by 5,100 assertions and 50k libFuzzer and ASan iterations.',
+          '396,336 ops/s under an 80/20 mixed workload via seqlock RCU concurrent reader threads and WAL group commit, cutting sync overhead 13x, with MVCC snapshot isolation whose transactions survive kill -9.',
+          'Hardened with in-process OpenSSL TLS 1.3, AUTH and a Prometheus metrics endpoint. 74 integration tests, CI on Linux and macOS on every push.',
+        ],
+        stack: ['C++17', 'kqueue/epoll', 'mmap', 'MVCC', 'OpenSSL', 'Prometheus'],
+        link: GH,
+      },
+      {
+        name: 'TCP/IP STACK',
+        tag: 'user-space networking',
+        crow: 'He rebuilt the internet\'s plumbing. The original was working fine.',
+        lines: [
+          'A user-space TCP/IP stack over raw AF_PACKET sockets with ARP resolution, IP fragmentation and reassembly, and a sliding-window TCP state machine, sustaining 850 Mbps across a 2-node benchmark.',
+          'Connection handshake latency cut 35% by replacing per-packet heap allocation with mmap-backed ring buffers for zero-copy packet processing, bringing average SYN-to-ACK down to 46 microseconds.',
+          'Diagnosed and fixed a congestion-collapse bug under simulated packet loss with a simplified Reno-style congestion control algorithm, improving throughput stability from 40% to 92% of theoretical link capacity under 5% loss.',
+        ],
+        stack: ['C++', 'raw sockets', 'epoll', 'Netfilter', 'TCP/IP'],
+        link: GH,
+      },
     ],
-    stack: ['LangGraph', 'LangChain', 'Pinecone', 'Claude API', 'FastAPI', 'Python'],
-    link: GH,
   },
   {
-    id: 'devmind',
-    name: 'DEVMIND',
-    tag: 'code review agent',
-    crow: 'He cut token costs 38%. The other 62% remain. Watching.',
-    lines: [
-      'An autonomous multi-step code review agent tested across 500+ simulated pull requests, combining the Claude API with MCP-standardized GitHub integrations in an agentic loop.',
-      'Redis caching of repeated MCP tool results (file reads, diff fetches) plus structured prompt compression cut Claude API token costs 38%, holding sub-2s p95 latency under concurrent runs.',
-      'A self-evaluation loop critiques its own output against a rubric of 12 code quality dimensions, including security checks, before posting review comments.',
+    id: 'aiml',
+    name: 'AI / ML',
+    short: 'AI / ML',
+    crow: 'He builds things that build things now. I remain unemployed.',
+    projects: [
+      {
+        name: 'PAPERMIND',
+        tag: 'research copilot',
+        crow: 'It reads the papers so he can pretend he did.',
+        lines: [
+          'A multi-agent research assistant on LangGraph: planner, retriever and critic agents answering multi-hop questions over academic corpora.',
+          '87% answer relevance on a 200-question arXiv CS evaluation set.',
+          'The RAG pipeline ingests 3,000+ arXiv PDFs into Pinecone with hybrid retrieval (dense plus BM25 reranking), dropping the hallucination rate from 31% to 9% on factual citation queries.',
+          'A critic node scores retrieved context against the query before generation and re-retrieves when confidence falls below threshold, cutting low-confidence responses 43%.',
+        ],
+        stack: ['LangGraph', 'LangChain', 'Pinecone', 'Claude API', 'FastAPI', 'Python'],
+        link: GH,
+      },
+      {
+        name: 'DEVMIND',
+        tag: 'code review agent',
+        crow: 'He cut token costs 38%. The other 62% remain. Watching.',
+        lines: [
+          'An autonomous multi-step code review agent tested across 500+ simulated pull requests, combining the Claude API with MCP-standardized GitHub integrations in an agentic loop.',
+          'Redis caching of repeated MCP tool results (file reads, diff fetches) plus structured prompt compression cut Claude API token costs 38%, holding sub-2s p95 latency under concurrent runs.',
+          'A self-evaluation loop critiques its own output against a rubric of 12 code quality dimensions, including security checks, before posting review comments.',
+        ],
+        stack: ['Claude API', 'MCP', 'FastAPI', 'Redis', 'React', 'OpenTelemetry', 'AWS EC2'],
+        link: GH,
+      },
+      {
+        name: 'MOVIEPULSE',
+        tag: 'recommender',
+        crow: 'An RMSE of 0.85. To predict whether humans like explosions. Groundbreaking.',
+        lines: [
+          'A hybrid recommendation engine combining ALS matrix factorization with content-based filtering on MovieLens 1M: 1M ratings, 6,040 users, 3,883 movies.',
+          'RMSE of 0.85 on held-out test data, a 24% improvement over a global-mean baseline.',
+          'Top-10 precision improved 56% (Precision@10 of 0.078 against 0.050) by tuning latent factor dimensionality and regularization through 5-fold cross-validation across 56 hyperparameter combinations.',
+          'Inference latency cut from 6.9ms to 0.9ms (7.7x) by precomputing and caching top-N recommendations in Redis, serving 1,087 req/s at 200 concurrent requests with zero failures.',
+        ],
+        stack: ['Python', 'scikit-learn', 'FastAPI', 'Redis', 'PostgreSQL'],
+        link: GH,
+      },
     ],
-    stack: ['Claude API', 'MCP', 'FastAPI', 'Redis', 'React', 'OpenTelemetry', 'AWS EC2'],
-    link: GH,
   },
   {
-    id: 'moviepulse',
-    name: 'MOVIEPULSE',
-    tag: 'recommender',
-    crow: 'An RMSE of 0.85. To predict whether humans like explosions. Groundbreaking.',
-    lines: [
-      'A hybrid recommendation engine combining ALS matrix factorization with content-based filtering on MovieLens 1M: 1M ratings, 6,040 users, 3,883 movies.',
-      'RMSE of 0.85 on held-out test data, a 24% improvement over a global-mean baseline.',
-      'Top-10 precision improved 56% (Precision@10 of 0.078 against 0.050) by tuning latent factor dimensionality and regularization through 5-fold cross-validation across 56 hyperparameter combinations.',
-      'Inference latency cut from 6.9ms to 0.9ms (7.7x) by precomputing and caching top-N recommendations in Redis, serving 1,087 req/s at 200 concurrent requests with zero failures.',
+    id: 'side',
+    name: 'SIDE QUESTS',
+    short: 'SIDE QUESTS',
+    crow: 'The drawer where everything else went.',
+    projects: [
+      {
+        name: 'ETHDENVER 2025',
+        tag: '2nd place · $3,000',
+        crow: 'Second place. He mentions it roughly as often as I molt. Constantly.',
+        lines: [
+          'A decentralized audio attribution platform, built at ETHDenver 2025.',
+          'Took 2nd place, awarded $3,000 USDC.',
+        ],
+        stack: [],
+        link: 'https://devfolio.co/',
+      },
+      {
+        name: 'THE GRIND',
+        tag: 'sealed',
+        locked: true,
+        crow: 'Sealed. The answer is a number he will not stop saying out loud.',
+        riddle: 'A number, counted one at a time, in stolen hours.',
+        lines: [
+          '300+ LeetCode problems solved, Hard and Medium.',
+          'Graphs, dynamic programming, and advanced data structures.',
+          'The souls counter on the shrine ticks to the same number. One soul per problem.',
+        ],
+        stack: ['graphs', 'dynamic programming', 'data structures', 'stubbornness'],
+        link: 'https://leetcode.com/u/Jas_009/',
+      },
     ],
-    stack: ['Python', 'scikit-learn', 'FastAPI', 'Redis', 'PostgreSQL'],
-    link: GH,
-  },
-  {
-    id: 'ethdenver',
-    name: 'ETHDENVER 2025',
-    tag: '2nd place · $3,000',
-    crow: 'Second place. He mentions it roughly as often as I molt. Constantly.',
-    lines: [
-      'A decentralized audio attribution platform, built at ETHDenver 2025.',
-      'Took 2nd place, awarded $3,000 USDC.',
-    ],
-    stack: [],
-    link: 'https://devfolio.co/',
-  },
-  {
-    id: 'grind',
-    name: 'THE GRIND',
-    tag: 'sealed',
-    locked: true,
-    crow: 'Sealed. The answer is a number he will not stop saying out loud.',
-    riddle: 'A number, counted one at a time, in stolen hours.',
-    lines: [
-      '300+ LeetCode problems solved, Hard and Medium.',
-      'Graphs, dynamic programming, and advanced data structures.',
-      'The souls counter on the shrine ticks to the same number. One soul per problem.',
-    ],
-    stack: ['graphs', 'dynamic programming', 'data structures', 'stubbornness'],
-    link: 'https://leetcode.com/u/Jas_009/',
   },
 ];
 
@@ -84,44 +151,64 @@ export function initHandheld() {
   const state = {
     power: true,
     booting: false,
-    view: 'menu',      // menu | detail | lock
-    index: 0,
+    view: 'cats',      // cats | menu | detail | lock
+    cat: 0,
+    proj: 0,
     digits: [0, 0, 0],
-    cursor: 0,         // which digit is selected in the lock view
+    cursor: 0,
     unlocked: false,
     sound: false,
     shake: false,
   };
 
+  const cat = () => categories[state.cat];
+  const proj = () => cat().projects[state.proj];
+
   // ---------- rendering ----------
   function render() {
     if (!state.power || state.booting) return;
+    if (state.view === 'cats') return renderCats();
     if (state.view === 'menu') return renderMenu();
     if (state.view === 'lock') return renderLock();
     return renderDetail();
   }
 
-  function renderMenu() {
-    const p = projects[state.index];
+  function renderCats() {
+    const c = cat();
     screen.innerHTML = `
-      <div class="scr-head">SELECT A WORK</div>
+      <div class="scr-head"><span>THE WORKBENCH</span></div>
       <div class="scr-menu">
-        ${projects.map((x, i) => `
-          <div class="scr-row${i === state.index ? ' on' : ''}">
-            <span class="scr-caret">${i === state.index ? '▶' : ''}</span>
+        ${categories.map((x, i) => `
+          <div class="scr-row${i === state.cat ? ' on' : ''}">
+            <span class="scr-caret">${i === state.cat ? '▶' : ''}</span>
+            <span class="scr-folder">▤</span>
+            <span class="scr-name">${x.short}</span>
+            <span class="scr-count">${x.projects.length}</span>
+          </div>`).join('')}
+      </div>
+      <div class="scr-box scr-desc"><span class="scr-crow">"${c.crow}"</span></div>
+      <div class="scr-foot"><span>${c.projects.length} works</span><span>A ▸ OPEN</span></div>`;
+  }
+
+  function renderMenu() {
+    const p = proj();
+    screen.innerHTML = `
+      <div class="scr-head"><span>${cat().short}</span><span class="scr-crumb">B ▸ FOLDERS</span></div>
+      <div class="scr-menu">
+        ${cat().projects.map((x, i) => `
+          <div class="scr-row${i === state.proj ? ' on' : ''}">
+            <span class="scr-caret">${i === state.proj ? '▶' : ''}</span>
             <span class="scr-name">${x.locked && !state.unlocked ? '🔒 ' : ''}${x.name}</span>
           </div>`).join('')}
       </div>
-      <div class="scr-box scr-desc">
-        <span class="scr-crow">"${p.crow}"</span>
-      </div>
+      <div class="scr-box scr-desc"><span class="scr-crow">"${p.crow}"</span></div>
       <div class="scr-foot"><span>${p.tag}</span><span>A ▸ OPEN</span></div>`;
   }
 
   function renderDetail() {
-    const p = projects[state.index];
+    const p = proj();
     screen.innerHTML = `
-      <div class="scr-head">${p.name}</div>
+      <div class="scr-head"><span>${p.name}</span><span class="scr-crumb">${cat().short}</span></div>
       <div class="scr-box scr-body" id="scr-body">
         ${p.lines.map(l => `<p>${l}</p>`).join('')}
         ${p.stack.length ? `<div class="scr-stack">${p.stack.map(s => `<span>${s}</span>`).join('')}</div>` : ''}
@@ -132,9 +219,9 @@ export function initHandheld() {
   }
 
   function renderLock() {
-    const p = projects[state.index];
+    const p = proj();
     screen.innerHTML = `
-      <div class="scr-head">SEALED</div>
+      <div class="scr-head"><span>SEALED</span><span class="scr-crumb">${cat().short}</span></div>
       <div class="scr-box scr-lock${state.shake ? ' wrong' : ''}">
         <p class="scr-riddle">${p.riddle}</p>
         <div class="scr-digits">
@@ -159,9 +246,9 @@ export function initHandheld() {
       screen.innerHTML = '';
       return;
     }
-    // a cold CRT warming up: a line opens out, then the menu arrives
+    // a cold CRT warming up: a line opens out, then the folders arrive
     state.booting = true;
-    state.view = 'menu';
+    state.view = 'cats';
     screen.innerHTML = `<div class="scr-bootline"></div>`;
     beep(880);
     setTimeout(() => { state.booting = false; render(); beep(1180); }, 620);
@@ -175,18 +262,29 @@ export function initHandheld() {
     beep(btn === 'a' ? 660 : btn === 'b' ? 330 : 520);
 
     if (btn === 'select') { state.sound = !state.sound; flash(`SOUND ${state.sound ? 'ON' : 'OFF'}`); return; }
-    if (btn === 'start') { state.view = 'menu'; render(); return; }
+    if (btn === 'start') { state.view = 'cats'; render(); return; }
 
+    if (state.view === 'cats') return catsInput(btn);
     if (state.view === 'menu') return menuInput(btn);
     if (state.view === 'lock') return lockInput(btn);
     return detailInput(btn);
   }
 
+  function catsInput(btn) {
+    if (btn === 'up') state.cat = (state.cat - 1 + categories.length) % categories.length;
+    else if (btn === 'down') state.cat = (state.cat + 1) % categories.length;
+    else if (btn === 'a') { state.view = 'menu'; state.proj = 0; }
+    else return;
+    render();
+  }
+
   function menuInput(btn) {
-    if (btn === 'up') state.index = (state.index - 1 + projects.length) % projects.length;
-    else if (btn === 'down') state.index = (state.index + 1) % projects.length;
+    const list = cat().projects;
+    if (btn === 'up') state.proj = (state.proj - 1 + list.length) % list.length;
+    else if (btn === 'down') state.proj = (state.proj + 1) % list.length;
+    else if (btn === 'b') { state.view = 'cats'; }
     else if (btn === 'a') {
-      const p = projects[state.index];
+      const p = proj();
       state.view = (p.locked && !state.unlocked) ? 'lock' : 'detail';
       if (state.view === 'lock') { state.digits = [0, 0, 0]; state.cursor = 0; }
     } else return;
@@ -198,18 +296,19 @@ export function initHandheld() {
     if (btn === 'up' && body) { body.scrollTop -= BODY_STEP; return; }
     if (btn === 'down' && body) { body.scrollTop += BODY_STEP; return; }
     if (btn === 'left' || btn === 'right') {
+      const list = cat().projects;
       const dir = btn === 'right' ? 1 : -1;
-      // skip past the chest while it is still sealed
-      let i = state.index, guard = 0;
+      // skip past anything still sealed
+      let i = state.proj, guard = 0;
       do {
-        i = (i + dir + projects.length) % projects.length;
+        i = (i + dir + list.length) % list.length;
         guard++;
-      } while (projects[i].locked && !state.unlocked && guard < projects.length);
-      state.index = i;
+      } while (list[i].locked && !state.unlocked && guard < list.length);
+      state.proj = i;
       render();
       return;
     }
-    if (btn === 'a') { window.open(projects[state.index].link, '_blank', 'noopener'); return; }
+    if (btn === 'a') { window.open(proj().link, '_blank', 'noopener'); return; }
     if (btn === 'b') { state.view = 'menu'; render(); }
   }
 
@@ -282,3 +381,5 @@ export function initHandheld() {
 
   render();
 }
+
+export { categories };

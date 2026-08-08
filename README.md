@@ -89,13 +89,13 @@ The scene stops rendering entirely when scrolled out of view, via `IntersectionO
 
 ### Projects, the workbench handheld
 
-A small console found in a drawer, and the whole section runs on it. The D-pad moves a pixel caret through the project list, A opens a work, B backs out, and left and right flip between projects once you are inside one. The description box under the menu carries the crow's line for whatever is highlighted, the way a creature entry would.
+A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Side Quests, each showing how many works it holds), then the works inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
 
 The screen is amber phosphor on obsidian rather than the classic green LCD, because ember is the only accent this site allows itself. Both colors are CSS variables at the top of the handheld block in `style.css`, so swapping to `#9bbc0f` on `#0f380f` is a two line change.
 
 The fifth entry is sealed. Opening it gives you a three digit lock: up and down change a digit, left and right move between them, A tries the combination. The answer is the number of LeetCode problems solved, which is the same number the souls counter on the shrine ticks to. A wrong code shakes the screen and keeps the seal shut.
 
-A slide switch on the top edge cuts the power. Off means a genuinely dead device: the screen goes to bare glass, the red LED goes out, and the controls stop responding. Switching back on runs a short CRT warm-up, a line opening out of the middle, before the menu returns.
+A slide switch on the top edge cuts the power, with the red POWER lamp beside it. Off means a genuinely dead device: the screen goes to bare glass, the red LED goes out, and the controls stop responding. Switching back on runs a short CRT warm-up, a line opening out of the middle, before the menu returns.
 
 SELECT toggles sound, off by default. When on, each press gets a short square wave blip from the Web Audio API. Everything is keyboard playable too: arrow keys, Z or Enter for A, X for B.
 
@@ -200,7 +200,7 @@ All content lives in plain data structures at the top of each module. There is n
 
 | To change | Edit |
 | --- | --- |
-| Projects, crow captions, stacks, riddle | `projects` array in `src/handheld.js` |
+| Folders, projects, crow captions, stacks, riddle | `categories` array in `src/handheld.js` |
 | Roles, dates, bullets, badges, cities | `milestones` array in `src/experience.js` |
 | Weekend builds and streak | `entries` array in `src/shiplog.js`, streak in `index.html` |
 | Contact links and their captions | `dispatches` array in `src/contact.js` |
@@ -255,7 +255,7 @@ Stated plainly rather than glossed over:
 - **The 3D scene is not described to screen readers.** The canvas is decorative and unlabeled. Purely ornamental elements (the raven, the perch, the banner, the feathers) are correctly marked `aria-hidden`, but the hero itself deserves a text alternative.
 - **The window manager is pointer first.** Dragging and resizing scroll windows requires a pointer. Folders open on a single tap on touch devices, but windows cannot be moved by keyboard.
 - **Mobile drops the road illustration.** Below 760 pixels the milestone cards stack full width and the path and its dots are hidden rather than redrawn vertically.
-- **Project links point at the GitHub profile, not individual repositories.** `handheld.js` links every project to `github.com/Arbiter09` because the per-project repository URLs are not recorded anywhere yet. Swap in the real ones.
+- **Project links point at the GitHub profile, not individual repositories.** `handheld.js` links all nine works to `github.com/Arbiter09` because the per-project repository URLs are not recorded anywhere yet. Swap in the real ones.
 - **ETHDenver has no tech stack listed.** The resume does not record one, so the field is deliberately left empty rather than invented.
 
 ---

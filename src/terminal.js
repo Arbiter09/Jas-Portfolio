@@ -49,6 +49,8 @@ export function initTerminal(navigateTo) {
     'skills.json': `{
   <span class="warm">"ai_ml"</span>:     ["Claude API", "MCP", "LangChain", "DSPy", "PyTorch",
                 "HuggingFace Transformers", "scikit-learn", "LoRA fine-tuning"],
+  <span class="warm">"systems"</span>:   ["Multi-Paxos", "2PC", "raw sockets", "TCP/IP", "epoll/kqueue",
+                "gRPC", "eBPF/XDP", "RTOS", "LevelDB", "MVCC"],
   <span class="warm">"languages"</span>: ["Python", "C/C++", "Java", "Go", "JavaScript", "TypeScript", "SQL", "Bash"],
   <span class="warm">"data_cloud"</span>:["AWS (EC2, RDS, S3, IAM)", "GCP", "Databricks", "Spark",
                 "Kafka", "PostgreSQL", "Redis", "MongoDB"],
@@ -61,11 +63,20 @@ export function initTerminal(navigateTo) {
 the sealed chest on the handheld knows the number.`,
   };
 
-  const projectsLs = `<span class="gold">papermind/</span>   multi-agent research assistant · 87% answer relevance
-<span class="gold">devmind/</span>     code review agent · MCP · −38% token spend
-<span class="gold">moviepulse/</span>  hybrid recommender · RMSE 0.85 · 7.7x faster inference
-<span class="gold">ethdenver/</span>   decentralized audio attribution · 2nd place · $3,000 USDC
-<span class="warm">chest.lock</span>   sealed — boot the handheld in Projects, bring a number`;
+  const projectsLs = `<span class="warm">systems/</span>
+  <span class="gold">multipaxosdb/</span>  9 servers · 3 shards · Multi-Paxos + 2PC · 10,081 TPS
+  <span class="gold">armforge/</span>      AArch64 bare metal · RTOS scheduler · 4µs WCRT
+  <span class="gold">kvstore/</span>       Redis-compatible C++17 engine · 836,183 ops/s
+  <span class="gold">tcpip/</span>         user-space stack · 850 Mbps · 46µs SYN-to-ACK
+
+<span class="warm">ai-ml/</span>
+  <span class="gold">papermind/</span>     multi-agent research assistant · 87% answer relevance
+  <span class="gold">devmind/</span>       code review agent · MCP · −38% token spend
+  <span class="gold">moviepulse/</span>    hybrid recommender · RMSE 0.85 · 7.7x faster inference
+
+<span class="warm">side-quests/</span>
+  <span class="gold">ethdenver/</span>     decentralized audio attribution · 2nd · $3,000 USDC
+  <span class="warm">chest.lock</span>     sealed — boot the handheld in Projects, bring a number`;
 
   const commands = {
     help: () => `<span class="gold">the archive responds to:</span>
