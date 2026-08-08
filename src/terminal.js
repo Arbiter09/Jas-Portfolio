@@ -57,6 +57,8 @@ export function initTerminal(navigateTo) {
   <span class="warm">"backend"</span>:   ["FastAPI", "Spring Boot", "REST", "GraphQL", "gRPC",
                 "Docker", "Kubernetes", "CI/CD", "OpenTelemetry"],
   <span class="warm">"frontend"</span>:  ["React", "Next.js", "Redux Toolkit", "Tailwind", "Vitest", "WCAG 2.1"],
+  <span class="warm">"web3"</span>:      ["Solidity", "Foundry", "Chainlink", "Chainlink CCIP", "OpenZeppelin",
+                "ERC20", "ERC721", "invariant + fuzz testing", "Anvil"],
   <span class="warm">"misc"</span>:      ["candle maintenance", "crow diplomacy", <span class="gold">"shipping on Sundays"</span>]
 }`,
     'grind.txt': `leetcode: 300+ solved (hard/medium). graphs, DP, advanced data structures.
@@ -74,9 +76,13 @@ the sealed chest on the handheld knows the number.`,
   <span class="gold">devmind/</span>       code review agent · MCP · −38% token spend
   <span class="gold">moviepulse/</span>    hybrid recommender · RMSE 0.85 · 7.7x faster inference
 
-<span class="warm">side-quests/</span>
+<span class="warm">web3/</span>
+  <span class="gold">stablecoin/</span>    over-collateralized DSC · WETH/WBTC · Chainlink oracles
+  <span class="gold">rebase-token/</span>  cross-chain interest-bearing ERC20 · Chainlink CCIP
+  <span class="gold">nft-erc20/</span>     MintCats ERC721 + on-chain Base64 MoodNft · OurToken
   <span class="gold">ethdenver/</span>     decentralized audio attribution · 2nd · $3,000 USDC
-  <span class="warm">chest.lock</span>     sealed — boot the handheld in Projects, bring a number`;
+
+<span class="warm">the-grind/</span>     <span class="err">sealed</span> — boot the handheld in Projects, bring a number`;
 
   const commands = {
     help: () => `<span class="gold">the archive responds to:</span>
