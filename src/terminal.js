@@ -62,7 +62,7 @@ export function initTerminal(navigateTo) {
   <span class="warm">"misc"</span>:      ["candle maintenance", "crow diplomacy", <span class="gold">"shipping on Sundays"</span>]
 }`,
     'grind.txt': `leetcode: 300+ solved (hard/medium). graphs, DP, advanced data structures.
-the sealed chest on the handheld knows the number.`,
+one soul per problem; the shrine counter ticks to the same number.`,
   };
 
   const projectsLs = `<span class="warm">systems/</span>
@@ -83,7 +83,8 @@ the sealed chest on the handheld knows the number.`,
   <span class="gold">nft-erc20/</span>     MintCats ERC721 + on-chain Base64 MoodNft · OurToken
   <span class="gold">ethdenver/</span>     decentralized audio attribution · 2nd · $3,000 USDC
 
-<span class="warm">the-grind/</span>     <span class="err">sealed</span> — boot the handheld in Projects, bring a number`;
+<span class="warm">the-grind/</span>
+  <span class="gold">leetcode/</span>      300+ solved (hard/medium) · graphs · DP · data structures`;
 
   const commands = {
     help: () => `<span class="gold">the archive responds to:</span>
