@@ -108,11 +108,47 @@ const categories = [
     ],
   },
   {
-    id: 'side',
-    name: 'SIDE QUESTS',
-    short: 'SIDE QUESTS',
-    crow: 'The drawer where everything else went.',
+    id: 'web3',
+    name: 'WEB3',
+    short: 'WEB3',
+    crow: 'Contracts that hold other people\'s money. He tested them, at least.',
     projects: [
+      {
+        name: 'STABLECOIN',
+        tag: 'WETH / WBTC',
+        crow: 'A dollar he invented, backed by two coins that refuse to sit still.',
+        lines: [
+          'A decentralized, over-collateralized stablecoin protocol in Solidity, letting users mint a USD-pegged token (DSC) against WETH and WBTC collateral through a central DSCEngine contract.',
+          'Protocol solvency is enforced by real-time health-factor calculations and a permissionless liquidation mechanism in DSCEngine.sol, using Chainlink price feeds validated through a custom OracleLib to prevent stale-price exploits.',
+          'Correctness validated with Foundry: unit tests for the core protocol flows, plus fuzz and invariant suites that continuously verified the system stayed fully over-collateralized under randomized inputs.',
+        ],
+        stack: ['Solidity', 'Foundry', 'Chainlink', 'DSCEngine', 'invariant tests'],
+        link: GH,
+      },
+      {
+        name: 'REBASE TOKEN',
+        tag: 'cross-chain',
+        crow: 'Interest that follows you across three chains. Like a debt collector, but polite.',
+        lines: [
+          'A cross-chain, interest-bearing ERC20 rebase token. Users deposit ETH into an L1 Vault to mint RebaseToken, with balances computed dynamically on-chain as principal plus continuously accrued interest.',
+          'A custom Chainlink CCIP TokenPool burns tokens on the source chain and encodes each user\'s locked interest rate into the message payload, preserving it on mint across Sepolia, Arbitrum Sepolia and ZKsync Sepolia.',
+          'Enforced a monotonically decreasing global rate with per-user rate locking, validated with Foundry unit, fuzz and fork-based cross-chain integration tests.',
+        ],
+        stack: ['Solidity', 'Foundry', 'Chainlink CCIP', 'ERC20', 'ZKsync'],
+        link: GH,
+      },
+      {
+        name: 'NFT & ERC20',
+        tag: 'token contracts',
+        crow: 'He minted cats. On-chain. Base64-encoded cats.',
+        lines: [
+          'Two independent Foundry-based Solidity projects. MintCats is an ERC721 suite: a standard BasicNft contract with IPFS-stored metadata, and a dynamic MoodNft that stores fully on-chain Base64-encoded metadata and lets users flip the NFT\'s mood between happy and sad.',
+          'OurToken is a custom ERC20 built on OpenZeppelin\'s standard library, with a Foundry deployment script that mints the initial supply to the deployer on broadcast.',
+          'A Solidity test suite in Foundry\'s forge covers transfers, allowances and revert conditions, with deployment automated across both projects via Anvil local nodes and testnet RPC configurations.',
+        ],
+        stack: ['Solidity', 'Foundry', 'OpenZeppelin', 'ERC721', 'ERC20', 'IPFS'],
+        link: GH,
+      },
       {
         name: 'ETHDENVER 2025',
         tag: '2nd place · $3,000',
@@ -124,12 +160,20 @@ const categories = [
         stack: [],
         link: 'https://devfolio.co/',
       },
+    ],
+  },
+  {
+    id: 'grind',
+    name: 'THE GRIND',
+    short: 'THE GRIND',
+    locked: true,
+    riddle: 'A number, counted one at a time, in stolen hours.',
+    crow: 'Sealed. The answer is a number he will not stop saying out loud.',
+    projects: [
       {
         name: 'THE GRIND',
-        tag: 'sealed',
-        locked: true,
-        crow: 'Sealed. The answer is a number he will not stop saying out loud.',
-        riddle: 'A number, counted one at a time, in stolen hours.',
+        tag: 'unsealed',
+        crow: 'Three hundred and counting. He is not well.',
         lines: [
           '300+ LeetCode problems solved, Hard and Medium.',
           'Graphs, dynamic programming, and advanced data structures.',
@@ -175,19 +219,22 @@ export function initHandheld() {
 
   function renderCats() {
     const c = cat();
+    const sealed = x => x.locked && !state.unlocked;
     screen.innerHTML = `
       <div class="scr-head"><span>THE WORKBENCH</span></div>
       <div class="scr-menu">
         ${categories.map((x, i) => `
           <div class="scr-row${i === state.cat ? ' on' : ''}">
             <span class="scr-caret">${i === state.cat ? '▶' : ''}</span>
-            <span class="scr-folder">▤</span>
+            <span class="scr-folder">${sealed(x) ? '🔒' : '▤'}</span>
             <span class="scr-name">${x.short}</span>
-            <span class="scr-count">${x.projects.length}</span>
+            <span class="scr-count">${sealed(x) ? '?' : x.projects.length}</span>
           </div>`).join('')}
       </div>
       <div class="scr-box scr-desc"><span class="scr-crow">"${c.crow}"</span></div>
-      <div class="scr-foot"><span>${c.projects.length} works</span><span>A ▸ OPEN</span></div>`;
+      <div class="scr-foot">
+        <span>${sealed(c) ? 'sealed' : c.projects.length + ' works'}</span><span>A ▸ OPEN</span>
+      </div>`;
   }
 
   function renderMenu() {
@@ -198,7 +245,7 @@ export function initHandheld() {
         ${cat().projects.map((x, i) => `
           <div class="scr-row${i === state.proj ? ' on' : ''}">
             <span class="scr-caret">${i === state.proj ? '▶' : ''}</span>
-            <span class="scr-name">${x.locked && !state.unlocked ? '🔒 ' : ''}${x.name}</span>
+            <span class="scr-name">${x.name}</span>
           </div>`).join('')}
       </div>
       <div class="scr-box scr-desc"><span class="scr-crow">"${p.crow}"</span></div>
@@ -219,11 +266,10 @@ export function initHandheld() {
   }
 
   function renderLock() {
-    const p = proj();
     screen.innerHTML = `
       <div class="scr-head"><span>SEALED</span><span class="scr-crumb">${cat().short}</span></div>
       <div class="scr-box scr-lock${state.shake ? ' wrong' : ''}">
-        <p class="scr-riddle">${p.riddle}</p>
+        <p class="scr-riddle">${cat().riddle}</p>
         <div class="scr-digits">
           ${state.digits.map((d, i) => `
             <span class="scr-digit${i === state.cursor ? ' on' : ''}">${d}</span>`).join('')}
@@ -273,8 +319,16 @@ export function initHandheld() {
   function catsInput(btn) {
     if (btn === 'up') state.cat = (state.cat - 1 + categories.length) % categories.length;
     else if (btn === 'down') state.cat = (state.cat + 1) % categories.length;
-    else if (btn === 'a') { state.view = 'menu'; state.proj = 0; }
-    else return;
+    else if (btn === 'a') {
+      state.proj = 0;
+      if (cat().locked && !state.unlocked) {
+        state.view = 'lock';
+        state.digits = [0, 0, 0];
+        state.cursor = 0;
+      } else {
+        state.view = 'menu';
+      }
+    } else return;
     render();
   }
 
@@ -283,11 +337,8 @@ export function initHandheld() {
     if (btn === 'up') state.proj = (state.proj - 1 + list.length) % list.length;
     else if (btn === 'down') state.proj = (state.proj + 1) % list.length;
     else if (btn === 'b') { state.view = 'cats'; }
-    else if (btn === 'a') {
-      const p = proj();
-      state.view = (p.locked && !state.unlocked) ? 'lock' : 'detail';
-      if (state.view === 'lock') { state.digits = [0, 0, 0]; state.cursor = 0; }
-    } else return;
+    else if (btn === 'a') { state.view = 'detail'; }
+    else return;
     render();
   }
 
@@ -297,14 +348,7 @@ export function initHandheld() {
     if (btn === 'down' && body) { body.scrollTop += BODY_STEP; return; }
     if (btn === 'left' || btn === 'right') {
       const list = cat().projects;
-      const dir = btn === 'right' ? 1 : -1;
-      // skip past anything still sealed
-      let i = state.proj, guard = 0;
-      do {
-        i = (i + dir + list.length) % list.length;
-        guard++;
-      } while (list[i].locked && !state.unlocked && guard < list.length);
-      state.proj = i;
+      state.proj = (state.proj + (btn === 'right' ? 1 : -1) + list.length) % list.length;
       render();
       return;
     }
@@ -313,7 +357,7 @@ export function initHandheld() {
   }
 
   function lockInput(btn) {
-    if (btn === 'b') { state.view = 'menu'; render(); return; }
+    if (btn === 'b') { state.view = 'cats'; render(); return; }
     if (btn === 'left') state.cursor = (state.cursor + 2) % 3;
     else if (btn === 'right') state.cursor = (state.cursor + 1) % 3;
     else if (btn === 'up') state.digits[state.cursor] = (state.digits[state.cursor] + 1) % 10;
