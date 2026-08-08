@@ -74,6 +74,7 @@ the sealed chest on the handheld knows the number.`,
 <span class="warm">ai-ml/</span>
   <span class="gold">papermind/</span>     multi-agent research assistant · 87% answer relevance
   <span class="gold">devmind/</span>       code review agent · MCP · −38% token spend
+  <span class="gold">neuralserve/</span>   LLaMA 3.1 8B LoRA · ROUGE-L 0.29→0.41 · p95 &lt;420ms
   <span class="gold">moviepulse/</span>    hybrid recommender · RMSE 0.85 · 7.7x faster inference
 
 <span class="warm">web3/</span>
