@@ -258,4 +258,4 @@ Stated plainly rather than glossed over:
 
 ---
 
-Forged on a Sunday, fueled by chai and stubbornness.
+Forged on a Sunday, fueled by coffee and stubbornness.

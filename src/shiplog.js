@@ -4,7 +4,7 @@ const entries = [
   {
     date: ['03', 'AUG'], hash: 'f4c1a2e',
     subject: 'feat(papermind): passage-level citation pinning',
-    body: 'Answers now link to the exact highlighted span in the source PDF. Reranker threshold tuned on 40 hand-labeled queries. Chai count: 3.',
+    body: 'Answers now link to the exact highlighted span in the source PDF. Reranker threshold tuned on 40 hand-labeled queries. Coffee count: 3.',
     tags: ['papermind'],
   },
   {

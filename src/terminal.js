@@ -100,7 +100,7 @@ one soul per problem; the shrine counter ticks to the same number.`,
   runes             clear              history
 <span class="dim">  ...and a few words it does not advertise.</span>`,
     whoami: () => `jas — backend engineer · agent builder · weekend shipper
-<span class="dim">uid=1000(jas) gid=1000(bench) groups=chai,hpc,hunters-dream</span>`,
+<span class="dim">uid=1000(jas) gid=1000(bench) groups=coffee,hpc,hunters-dream</span>`,
     pwd: () => `/home/jas/archive`,
     date: () => new Date().toString(),
     ls: (args) => {
@@ -153,7 +153,7 @@ resume: <a href="${import.meta.env.BASE_URL}resume.pdf" target="_blank">resume.p
     souls: () => `<span class="gold">souls held: 300+</span> <span class="dim">(one per leetcode problem. no shortcuts were taken.)</span>`,
     crow: () => `<span class="dim">"caw," it says, meaning: your RMSE flex impresses no one.</span>`,
     humanity: () => `<span class="dim">restored. briefly. then a flaky test appeared.</span>`,
-    chai: () => `<span class="warm">☕ brewing...</span> <span class="dim">productivity +12%, sleep schedule −40%</span>`,
+    coffee: () => `<span class="warm">☕ brewing...</span> <span class="dim">productivity +12%, sleep schedule −40%</span>`,
     vim: () => `<span class="err">you are now trapped. (kidding — this shell is merciful. :q respected.)</span>`,
     ':q': () => `<span class="dim">you were never in vim. but the instinct is respected.</span>`,
     runes: () => { startGame(); return null; },
