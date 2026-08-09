@@ -84,6 +84,12 @@ one soul per problem; the shrine counter ticks to the same number.`,
   <span class="gold">nft-erc20/</span>     MintCats ERC721 + on-chain Base64 MoodNft · OurToken
   <span class="gold">ethdenver/</span>     decentralized audio attribution · 2nd · $3,000 USDC
 
+<span class="warm">full-stack/</span>
+  <span class="gold">rentiful/</span>      Next.js + Prisma/PostGIS · Mapbox · AWS Cognito/EC2/RDS
+  <span class="gold">netflixgemini/</span> Gemini natural-language search over TMDB · Firebase auth
+  <span class="gold">epicuria/</span>      React food ordering · custom hooks · Jest suite
+  <span class="gold">pokedex/</span>       all 151 from PokeAPI · localStorage cache · move modals
+
 <span class="warm">the-grind/</span>
   <span class="gold">leetcode/</span>      300+ solved (hard/medium) · graphs · DP · data structures`;
 

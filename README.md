@@ -89,7 +89,7 @@ The scene stops rendering entirely when scrolled out of view, via `IntersectionO
 
 ### Projects, the workbench handheld
 
-A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Web3 and The Grind, each showing how many works it holds), then the works inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
+A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Web3, Full-Stack and The Grind, each showing how many works it holds), then the works inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
 
 The screen is amber phosphor on obsidian rather than the classic green LCD, because ember is the only accent this site allows itself. Both colors are CSS variables at the top of the handheld block in `style.css`, so swapping to `#9bbc0f` on `#0f380f` is a two line change.
 
@@ -253,7 +253,7 @@ Stated plainly rather than glossed over:
 - **The 3D scene is not described to screen readers.** The canvas is decorative and unlabeled. Purely ornamental elements (the raven, the perch, the banner, the feathers) are correctly marked `aria-hidden`, but the hero itself deserves a text alternative.
 - **The window manager is pointer first.** Dragging and resizing scroll windows requires a pointer. Folders open on a single tap on touch devices, but windows cannot be moved by keyboard.
 - **Mobile drops the road illustration.** Below 760 pixels the milestone cards stack full width and the path and its dots are hidden rather than redrawn vertically.
-- **Most project links point at the GitHub profile, not individual repositories.** MCPTrace and The Grind link to their real destinations; the other twelve works in `handheld.js` fall back to `github.com/Arbiter09` because their repository URLs are not recorded anywhere yet. Swap in the real ones as they land.
+- **Some project links still point at the GitHub profile rather than a repository.** MCPTrace, the four full-stack works and The Grind link to their real destinations. The remaining twelve in `handheld.js` fall back to `github.com/Arbiter09` because their repository URLs are not recorded anywhere yet. Swap in the real ones as they land.
 - **ETHDenver has no tech stack listed.** The resume does not record one, so the field is deliberately left empty rather than invented.
 
 ---
