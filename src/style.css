@@ -181,6 +181,12 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   letter-spacing: 0.1em; color: var(--gold-banner);
   text-shadow: 0 0 18px rgba(201,165,90,0.35);
 }
+/* the longer titles would otherwise run off a narrow screen */
+@media (max-width: 560px) {
+  #acquire-banner { width: 100%; }
+  .acquire-inner { padding: 9px 16px; }
+  .acquire-item { font-size: 16px; letter-spacing: 0.05em; }
+}
 
 /* souls counter */
 #souls-counter {

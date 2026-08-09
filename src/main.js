@@ -44,7 +44,7 @@ window.addEventListener('resize', () => placeUnderline(currentTab));
 placeUnderline('home');
 
 // ---------- role typing + item-pickup banner ----------
-const roles = ['backend engineer', 'agent builder', 'weekend shipper'];
+const roles = ['backend engineer', 'forward deployed engineer', 'agent builder', 'weekend shipper'];
 const roleEl = document.getElementById('role-type');
 const banner = document.getElementById('acquire-banner');
 const bannerItem = document.getElementById('acquire-item');

@@ -2,7 +2,6 @@
 // Folders first, then works inside them. D-pad browses, A opens, B backs out.
 // The crow's line lives in the description box, the way a creature entry would.
 
-const GH = 'https://github.com/Arbiter09';
 
 const categories = [
   {
@@ -21,7 +20,7 @@ const categories = [
           'Transaction throughput increased 272x to a mean 10,081 TPS, up from 38, by diagnosing single-transaction batching bottlenecks and generating concurrent workloads across all 3 shard leaders.',
         ],
         stack: ['C++', 'Multi-Paxos', '2PC', 'gRPC', 'LevelDB'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/MultiPaxosDB',
       },
       {
         name: 'ARMFORGE',
@@ -33,7 +32,7 @@ const categories = [
           'An eBPF/XDP network monitor using libbpf CO-RE in SKB mode, classifying guest traffic into BPF map counters and ring-buffer events. Verified on AWS EC2 Graviton2 capturing 10/10 ICMP packets.',
         ],
         stack: ['C', 'AArch64', 'QEMU', 'RTOS', 'eBPF/XDP', 'libbpf'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/ArmForge',
       },
       {
         name: 'KV STORE',
@@ -45,7 +44,7 @@ const categories = [
           'Hardened with in-process OpenSSL TLS 1.3, AUTH and a Prometheus metrics endpoint. 74 integration tests, CI on Linux and macOS on every push.',
         ],
         stack: ['C++17', 'kqueue/epoll', 'mmap', 'MVCC', 'OpenSSL', 'Prometheus'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/Redis-Compatible-KeyValue-Storage-Engine',
       },
       {
         name: 'TCP/IP STACK',
@@ -57,7 +56,7 @@ const categories = [
           'Diagnosed and fixed a congestion-collapse bug under simulated packet loss with a simplified Reno-style congestion control algorithm, improving throughput stability from 40% to 92% of theoretical link capacity under 5% loss.',
         ],
         stack: ['C++', 'raw sockets', 'epoll', 'Netfilter', 'TCP/IP'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/Custom-User-Space-TCP-IP-Stack',
       },
     ],
   },
@@ -78,7 +77,7 @@ const categories = [
           'A critic node scores retrieved context against the query before generation and re-retrieves when confidence falls below threshold, cutting low-confidence responses 43%.',
         ],
         stack: ['LangGraph', 'LangChain', 'Pinecone', 'Claude API', 'FastAPI', 'Python'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/PaperMind',
       },
       {
         name: 'DEVMIND',
@@ -90,7 +89,7 @@ const categories = [
           'A self-evaluation loop critiques its own output against a rubric of 12 code quality dimensions, including security checks, before posting review comments.',
         ],
         stack: ['Claude API', 'MCP', 'FastAPI', 'Redis', 'React', 'OpenTelemetry', 'AWS EC2'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/DevMind',
       },
       {
         name: 'MCPTRACE',
@@ -115,7 +114,7 @@ const categories = [
           'The serving pipeline is instrumented with OpenTelemetry and a Prometheus and Grafana dashboard tracking token throughput, GPU utilization and cache hit rate across 3 model versions, to catch latency regressions early.',
         ],
         stack: ['PyTorch', 'LoRA', 'HuggingFace', 'FastAPI', 'Redis', 'Docker', 'AWS EC2'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/NeuralServe',
       },
       {
         name: 'MOVIEPULSE',
@@ -128,7 +127,7 @@ const categories = [
           'Inference latency cut from 6.9ms to 0.9ms (7.7x) by precomputing and caching top-N recommendations in Redis, serving 1,087 req/s at 200 concurrent requests with zero failures.',
         ],
         stack: ['Python', 'scikit-learn', 'FastAPI', 'Redis', 'PostgreSQL'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/MoviePulse',
       },
     ],
   },
@@ -148,7 +147,7 @@ const categories = [
           'Correctness validated with Foundry: unit tests for the core protocol flows, plus fuzz and invariant suites that continuously verified the system stayed fully over-collateralized under randomized inputs.',
         ],
         stack: ['Solidity', 'Foundry', 'Chainlink', 'DSCEngine', 'invariant tests'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/Crypto-Collateralized-Stablecoin-WETH-WBTC-',
       },
       {
         name: 'REBASE TOKEN',
@@ -160,7 +159,7 @@ const categories = [
           'Enforced a monotonically decreasing global rate with per-user rate locking, validated with Foundry unit, fuzz and fork-based cross-chain integration tests.',
         ],
         stack: ['Solidity', 'Foundry', 'Chainlink CCIP', 'ERC20', 'ZKsync'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/Cross-Chain-Rebase-Token',
       },
       {
         name: 'NFT & ERC20',
@@ -172,7 +171,7 @@ const categories = [
           'A Solidity test suite in Foundry\'s forge covers transfers, allowances and revert conditions, with deployment automated across both projects via Anvil local nodes and testnet RPC configurations.',
         ],
         stack: ['Solidity', 'Foundry', 'OpenZeppelin', 'ERC721', 'ERC20', 'IPFS'],
-        link: GH,
+        link: 'https://github.com/Arbiter09/MintCats',
       },
       {
         name: 'ETHDENVER 2025',
