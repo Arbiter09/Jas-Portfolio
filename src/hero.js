@@ -7,6 +7,11 @@ const MOON = new THREE.Color(0x6f9cc4);
 const BG_WARM = new THREE.Color(0x0d0b09);
 const BG_MOON = new THREE.Color(0x090b0f);
 
+// Reduced motion keeps the shrine on screen but stills it: no self-rotation,
+// no cursor drift, no lantern sway, no flicker, no drifting ash. Scroll still
+// cracks the ring and cools the light, because the viewer is driving that.
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export function initHero() {
   const canvas = document.getElementById('hero-canvas');
   const hero = document.getElementById('hero');
@@ -281,28 +286,40 @@ export function initHero() {
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
+      return true;
     }
+    return false;
   }
 
   const tmpWarm = new THREE.Color(), tmpBg = new THREE.Color();
   const clock = new THREE.Clock();
+  let lastDrawn = -1;
   let visible = true;
   new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(hero);
 
   function frame() {
     requestAnimationFrame(frame);
     if (!visible) return;
-    resize();
-    const t = clock.getElapsedTime();
+    const resized = resize();
+    // nothing moves on its own under reduced motion, so only redraw when the
+    // scroll position or the canvas size actually changed
+    if (REDUCED && !resized && Math.abs(scrollProg - lastDrawn) < 0.0004) return;
+    lastDrawn = scrollProg;
+
+    // a frozen clock keeps every time-driven term constant, so the scene
+    // composes exactly as designed but holds still
+    const t = REDUCED ? 0 : clock.getElapsedTime();
     const cold = Math.min(1, Math.max(0, (scrollProg - 0.25) / 0.6));
 
     // slow self-rotation + cinematic drift toward the cursor
-    tiltX += ((mouseY * 0.06) - tiltX) * 0.018;
-    tiltY += ((mouseX * 0.10) - tiltY) * 0.018;
+    if (!REDUCED) {
+      tiltX += ((mouseY * 0.06) - tiltX) * 0.018;
+      tiltY += ((mouseX * 0.10) - tiltY) * 0.018;
+    }
     root.rotation.y = t * 0.07 + tiltY;
     root.rotation.x = tiltX * 0.5;
-    camera.position.x = Math.sin(t * 0.05) * 0.25 + mouseX * 0.35;
-    camera.position.y = 2.6 + mouseY * -0.15 + scrollProg * 0.9;
+    camera.position.x = REDUCED ? 0 : Math.sin(t * 0.05) * 0.25 + mouseX * 0.35;
+    camera.position.y = 2.6 + (REDUCED ? 0 : mouseY * -0.15) + scrollProg * 0.9;
     camera.lookAt(0, 1.7 - scrollProg * 0.4, 0);
 
     // the ring cracks apart with scroll
@@ -342,14 +359,16 @@ export function initHero() {
     runeMat.opacity = hoverThin * 0.5 * (1 - spread * 0.6);
 
     // ash rises
-    const p = moteGeo.attributes.position;
-    for (let i = 0; i < MOTES; i++) {
-      let y = p.getY(i) + 0.004 + moteSeed[i] * 0.006 + spread * 0.01;
-      if (y > 8.5) y = 0;
-      p.setY(i, y);
-      p.setX(i, p.getX(i) + Math.sin(t * 0.5 + moteSeed[i] * 20) * 0.0015);
+    if (!REDUCED) {
+      const p = moteGeo.attributes.position;
+      for (let i = 0; i < MOTES; i++) {
+        let y = p.getY(i) + 0.004 + moteSeed[i] * 0.006 + spread * 0.01;
+        if (y > 8.5) y = 0;
+        p.setY(i, y);
+        p.setX(i, p.getX(i) + Math.sin(t * 0.5 + moteSeed[i] * 20) * 0.0015);
+      }
+      p.needsUpdate = true;
     }
-    p.needsUpdate = true;
     moteMat.color.setHex(cold > 0.5 ? 0x9ab8d0 : 0xd8b58a);
 
     // the moth keeps its own counsel

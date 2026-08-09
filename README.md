@@ -25,6 +25,7 @@ Then open http://localhost:5173.
 - [Making it yours](#making-it-yours)
 - [Deploying](#deploying)
 - [Performance](#performance)
+- [Accessibility](#accessibility)
 - [Known gaps](#known-gaps)
 
 ## Why no framework
@@ -245,13 +246,17 @@ Choices that keep it light:
 
 If the bundle matters more than the shrine, the honest lever is `hero.js`. Lazy loading Three.js behind a dynamic import would cut the initial payload by roughly 90%.
 
+## Accessibility
+
+- **`prefers-reduced-motion` is honoured.** Ten decorative animations run at rest by default; under the preference they all stop, reveals land instantly instead of sliding, fog transitions become plain swaps, the typing effect swaps text outright, and the shrine freezes on a still frame. Scroll-driven changes are kept, because the viewer is driving those. The hero also stops redrawing a frame that cannot change, so it costs nothing while idle.
+- **Every control has a visible focus ring.** One ember outline via `:focus-visible`, tuned per control shape, so mouse users never see it and keyboard users always do.
+- **The handheld only captures the D-pad keys while it holds focus.** Otherwise the arrow keys belong to the page. Click or tab to the device to play it; the hint line under it brightens when it is listening.
+
 ## Known gaps
 
 Stated plainly rather than glossed over:
 
-- **No `prefers-reduced-motion` support yet.** This is the most important thing to add. The site animates a great deal and currently ignores that preference.
 - **The 3D scene is not described to screen readers.** The canvas is decorative and unlabeled. Purely ornamental elements (the raven, the perch, the banner, the feathers) are correctly marked `aria-hidden`, but the hero itself deserves a text alternative.
-- **The window manager is pointer first.** Dragging and resizing scroll windows requires a pointer. Folders open on a single tap on touch devices, but windows cannot be moved by keyboard.
 - **Mobile drops the road illustration.** Below 760 pixels the milestone cards stack full width and the path and its dots are hidden rather than redrawn vertically.
 - **ETHDenver has no project link.** It points at devfolio.co rather than the submission itself, which is not recorded anywhere. Every other work links to its own repository.
 - **ETHDenver has no tech stack listed.** The resume does not record one, so the field is deliberately left empty rather than invented.

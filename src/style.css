@@ -827,6 +827,61 @@ body.moonlit .nav-tab.active { color: #a8cbe8; }
   .nav-tabs { overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .nav-tabs::-webkit-scrollbar { display: none; }
   .nav-tab { padding: 0 8px; font-size: 10.5px; letter-spacing: 0.08em; white-space: nowrap; }
-  #desktop-icons { grid-template-columns: repeat(auto-fill, 96px); gap: 12px; padding: 20px; }
-  .scroll-window { min-width: 260px; }
+}
+
+/* ————— keyboard focus —————
+   Every interactive control gets the same ember ring, so a keyboard user can
+   always see where they are. :focus-visible keeps it off mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.nav-tab:focus-visible { outline-offset: -6px; color: var(--ember-hot); }
+.hh-round:focus-visible { outline-offset: 4px; border-radius: 50%; }
+.dp:focus-visible { outline-offset: -2px; z-index: 1; }
+.hh-switch:focus-visible, .hh-pill:focus-visible { outline-offset: 4px; }
+#hh-screen:focus-visible { outline-offset: -2px; border-color: var(--ember); }
+.dispatch-val:focus-visible, .contact-val:focus-visible { outline-offset: 4px; }
+#term-input:focus-visible { outline: none; } /* the caret already marks the spot */
+
+/* the handheld only answers the D-pad keys while it holds focus, so say so */
+#handheld:focus-within .hh-shell {
+  border-color: rgba(224, 139, 61, 0.32);
+  box-shadow: 0 26px 70px rgba(0,0,0,0.6), 0 0 34px rgba(224,139,61,0.09),
+              inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -2px 0 rgba(0,0,0,0.5);
+}
+.hh-hint .hh-armed { color: var(--bone-dim); transition: color 0.4s; }
+#handheld:focus-within .hh-hint .hh-armed { color: var(--ember); }
+
+/* ————— reduced motion —————
+   The site runs ten decorative animations at rest. When the viewer has asked
+   for less, the loops stop and transitions collapse; everything still reaches
+   its final state, so nothing is left half-drawn or invisible. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  html { scroll-behavior: auto; }
+
+  /* the always-on ambience: stop it outright rather than run it once */
+  #grain { animation: none; opacity: 0.035; }
+  .rune-trace, .hh-led, .road-node.current { animation: none; }
+  #term-screen, #desktop::after { animation: none; }
+  .type-cursor { animation: none; opacity: 1; }
+  .scroll-line { animation: none; opacity: 0.5; }
+  .scr-row.on .scr-caret { animation: none; }
+  #raven.perched { animation: none; }
+  #raven.flying .r-wing-front, #raven.flying .r-wing-back { animation: none; }
+  #raven .r-wing { transform: rotate(-6deg); }
+
+  /* reveals land immediately instead of sliding in */
+  .milestone, .dispatch, #altar { opacity: 1 !important; transform: none !important; }
+  .page.active { animation: none; }
+  #fog-transition { display: none; }
+  .feather, #raven-flyer { display: none; }
 }

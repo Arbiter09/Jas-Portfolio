@@ -269,6 +269,7 @@ const categories = [
 ];
 
 const BODY_STEP = 34; // pixels the D-pad scrolls a detail pane per press
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function initHandheld() {
   const screen = document.getElementById('hh-screen');
@@ -354,9 +355,10 @@ export function initHandheld() {
       screen.innerHTML = '';
       return;
     }
+    state.view = 'cats';
+    if (REDUCED) { state.booting = false; render(); return; }
     // a cold CRT warming up: a line opens out, then the folders arrive
     state.booting = true;
-    state.view = 'cats';
     screen.innerHTML = `<div class="scr-bootline"></div>`;
     beep(880);
     setTimeout(() => { state.booting = false; render(); beep(1180); }, 620);
@@ -443,8 +445,21 @@ export function initHandheld() {
     ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right',
     z: 'a', Z: 'a', Enter: 'a', x: 'b', X: 'b', Escape: 'b', Backspace: 'b',
   };
+
+  // Clicking anywhere on the shell hands focus to the screen, so the device is
+  // playable straight after a tap without stealing keys from the rest of the page.
+  root.querySelector('.hh-shell').addEventListener('pointerdown', (e) => {
+    if (!e.target.closest('[data-btn]') && !e.target.closest('#hh-power')) screen.focus();
+  });
+  root.querySelectorAll('[data-btn]').forEach(b => {
+    b.addEventListener('click', () => screen.focus());
+  });
+
   window.addEventListener('keydown', (e) => {
-    if (!document.getElementById('page-projects').classList.contains('active')) return;
+    // Only swallow the D-pad keys while the device actually holds focus.
+    // Otherwise the arrows belong to the page, and this tab is tall enough
+    // that people need them to scroll.
+    if (!root.contains(document.activeElement)) return;
     if (!state.power || state.booting) return;
     const btn = KEYS[e.key];
     if (!btn) return;

@@ -1,5 +1,7 @@
 // Send a Raven — the bird sits until you scroll, then carries you down the page.
 
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 const dispatches = [
   {
     key: 'email',
@@ -140,7 +142,7 @@ export function initContact() {
     // a bird at rest sits level and faces out; only flight banks and flips
     if (!airborne) { angle = 0; flip = 1; }
 
-    const bob = airborne ? Math.sin(performance.now() / 220) * 3 : 0;
+    const bob = (airborne && !REDUCED) ? Math.sin(performance.now() / 220) * 3 : 0;
     raven.style.transform =
       `translate(${p.x}px, ${p.y + bob}px) translate(-50%, -50%) rotate(${angle}deg) scaleX(${flip})`;
   }
@@ -154,23 +156,28 @@ export function initContact() {
   window.addEventListener('tab:contact', layoutFlight);
   layoutFlight();
 
-  // keep the wing-beat alive while airborne so the bob reads as flight
-  (function idle() {
-    if (raven.classList.contains('flying')) fly();
-    requestAnimationFrame(idle);
-  })();
+  // keep the wing-beat alive while airborne so the bob reads as flight.
+  // With reduced motion there is no bob, so scroll alone drives the bird.
+  if (!REDUCED) {
+    (function idle() {
+      if (raven.classList.contains('flying')) fly();
+      requestAnimationFrame(idle);
+    })();
+  }
 
   // ---------- release the raven ----------
   const feathers = document.getElementById('feather-layer');
   document.getElementById('release-raven').addEventListener('click', () => {
     const note = document.getElementById('altar-note');
-    for (let i = 0; i < 14; i++) dropFeather(feathers);
-    const flyer = raven.cloneNode(true);
-    flyer.id = 'raven-flyer';
-    flyer.classList.add('flying', 'departing');
-    flyer.classList.remove('perched');
-    document.body.appendChild(flyer);
-    setTimeout(() => flyer.remove(), 2400);
+    if (!REDUCED) for (let i = 0; i < 14; i++) dropFeather(feathers);
+    if (!REDUCED) {
+      const flyer = raven.cloneNode(true);
+      flyer.id = 'raven-flyer';
+      flyer.classList.add('flying', 'departing');
+      flyer.classList.remove('perched');
+      document.body.appendChild(flyer);
+      setTimeout(() => flyer.remove(), 2400);
+    }
     note.textContent = 'The raven is away. Expect a reply within one turn of the moon.';
     note.classList.add('sent');
     setTimeout(() => { window.location.href = 'mailto:jasshah9513@gmail.com'; }, 900);

@@ -6,6 +6,10 @@ import { initShiplog } from './shiplog.js';
 import { initTerminal } from './terminal.js';
 import { initContact } from './contact.js';
 
+// Some of the motion here is driven from JS, so CSS alone cannot honour the
+// reduced-motion preference. Each module reads the same query.
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // ---------- tab router with fog transitions + rune underline ----------
 const tabs = [...document.querySelectorAll('.nav-tab')];
 const underline = document.getElementById('rune-underline');
@@ -33,7 +37,7 @@ export function navigateTo(tab, instant = false) {
     if (tab === 'terminal') setTimeout(() => document.getElementById('term-input').focus(), 350);
     window.dispatchEvent(new Event('tab:' + tab));
   };
-  if (instant) { go(); return; }
+  if (instant || REDUCED) { go(); return; }
   fog.classList.add('on');
   setTimeout(() => { go(); fog.classList.remove('on'); }, 320);
 }
@@ -52,6 +56,13 @@ let roleIdx = 0;
 
 function typeRole() {
   const role = roles[roleIdx];
+  // reduced motion: swap the title outright, no per-character typing, no banner
+  if (REDUCED) {
+    roleEl.textContent = role;
+    roleIdx = (roleIdx + 1) % roles.length;
+    setTimeout(typeRole, 5000);
+    return;
+  }
   // flash the acquisition banner first, like an item pickup
   bannerItem.textContent = role.replace(/\b\w/g, c => c.toUpperCase());
   if (currentTab === 'home' && window.scrollY < window.innerHeight * 0.6) {
@@ -83,7 +94,7 @@ setTimeout(typeRole, 1100);
 // ---------- souls counter: ticks quietly to the real number ----------
 const soulsEl = document.getElementById('souls-value');
 let souls = 0;
-const soulsTick = setInterval(() => {
+const soulsTick = REDUCED ? (soulsEl.textContent = '300+', null) : setInterval(() => {
   souls += Math.ceil((300 - souls) * 0.012) || 1;
   if (souls >= 300) { souls = 300; clearInterval(soulsTick); soulsEl.textContent = '300+'; return; }
   soulsEl.textContent = souls;
@@ -96,6 +107,7 @@ window.addEventListener('scroll', () => {
 
 // ---------- ember sparks on press ----------
 document.addEventListener('pointerdown', (e) => {
+  if (REDUCED) return;
   const btn = e.target.closest('.ember-btn, .nav-tab, .hh-round, .hh-pill, .dp');
   if (!btn) return;
   for (let i = 0; i < 7; i++) {
