@@ -253,7 +253,7 @@ Stated plainly rather than glossed over:
 - **The 3D scene is not described to screen readers.** The canvas is decorative and unlabeled. Purely ornamental elements (the raven, the perch, the banner, the feathers) are correctly marked `aria-hidden`, but the hero itself deserves a text alternative.
 - **The window manager is pointer first.** Dragging and resizing scroll windows requires a pointer. Folders open on a single tap on touch devices, but windows cannot be moved by keyboard.
 - **Mobile drops the road illustration.** Below 760 pixels the milestone cards stack full width and the path and its dots are hidden rather than redrawn vertically.
-- **Project links point at the GitHub profile, not individual repositories.** `handheld.js` links all twelve works to `github.com/Arbiter09` because the per-project repository URLs are not recorded anywhere yet. Swap in the real ones.
+- **Most project links point at the GitHub profile, not individual repositories.** MCPTrace and The Grind link to their real destinations; the other twelve works in `handheld.js` fall back to `github.com/Arbiter09` because their repository URLs are not recorded anywhere yet. Swap in the real ones as they land.
 - **ETHDenver has no tech stack listed.** The resume does not record one, so the field is deliberately left empty rather than invented.
 
 ---

@@ -93,6 +93,19 @@ const categories = [
         link: GH,
       },
       {
+        name: 'MCPTRACE',
+        tag: 'agent inspector',
+        crow: 'He built surveillance for his own agents. They have no idea.',
+        lines: [
+          'A transparent inspection and debugging layer that sits between an agent and its MCP server. Every tool call passing through is intercepted, logged, timed and streamed to a live terminal-style dashboard, replacing print-debugging across long agentic loops.',
+          'Runs as a transparent proxy, so agents behave identically with or without it in front. A mock mode replays captured snapshots offline, decoupling test runs from live APIs.',
+          'A pytest plugin ships session-scoped fixtures and assertion helpers: assert a tool was called, with which arguments, how many times, whether every response matches a JSON schema, and diff a run against a saved baseline to catch trace regressions.',
+          'The React dashboard streams over SSE with expandable JSON rows, per-tool latency charts that turn amber above 500ms, and a replay button that re-fires any recorded call through the mock server. Traces persist in SQLite and export as JSON snapshots.',
+        ],
+        stack: ['FastAPI', 'SQLModel', 'SQLite', 'SSE', 'React', 'TypeScript', 'pytest', 'Docker'],
+        link: 'https://github.com/Arbiter09/MCPTrace',
+      },
+      {
         name: 'NEURALSERVE',
         tag: 'fine-tune + serving',
         crow: 'He made an 8-billion-parameter model 98.6% less work to train. The other 1.4% took a week.',

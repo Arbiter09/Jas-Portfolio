@@ -74,6 +74,7 @@ one soul per problem; the shrine counter ticks to the same number.`,
 <span class="warm">ai-ml/</span>
   <span class="gold">papermind/</span>     multi-agent research assistant · 87% answer relevance
   <span class="gold">devmind/</span>       code review agent · MCP · −38% token spend
+  <span class="gold">mcptrace/</span>      MCP tool-call inspector · SSE dashboard · pytest plugin
   <span class="gold">neuralserve/</span>   LLaMA 3.1 8B LoRA · ROUGE-L 0.29→0.41 · p95 &lt;420ms
   <span class="gold">moviepulse/</span>    hybrid recommender · RMSE 0.85 · 7.7x faster inference
 
