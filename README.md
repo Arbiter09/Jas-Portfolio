@@ -58,7 +58,7 @@ index.html          markup for all six tabs, plus the raven and perch SVGs
 src/
   main.js           tab router, rune underline, typing effect, souls counter, ember sparks
   hero.js           the Three.js shrine scene
-  handheld.js       the Projects handheld: menu, detail views, digit lock
+  handheld.js       the Projects handheld: folders, menus, detail views
   experience.js     the pilgrim's road and its milestone data
   terminal.js       the shell, its filesystem, easter eggs, and the rune game
   shiplog.js        weekend commit entries
