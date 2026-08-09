@@ -116,7 +116,7 @@ one soul per problem; the shrine counter ticks to the same number.`,
     },
     cd: (args) => {
       const t = (args[0] || '').replace(/\/$/, '');
-      const map = { projects: 'projects', experience: 'experience', shiplog: 'shiplog', home: 'home', contact: 'contact', '~': 'home' };
+      const map = { projects: 'projects', experience: 'experience', home: 'home', contact: 'contact', '~': 'home' };
       if (map[t]) {
         setTimeout(() => navigateTo(map[t]), 450);
         return `<span class="dim">passing through the fog gate → ${map[t]}...</span>`;

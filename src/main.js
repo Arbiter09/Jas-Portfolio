@@ -2,7 +2,6 @@ import './style.css';
 import { initHero } from './hero.js';
 import { initHandheld } from './handheld.js';
 import { initExperience } from './experience.js';
-import { initShiplog } from './shiplog.js';
 import { initTerminal } from './terminal.js';
 import { initContact } from './contact.js';
 
@@ -127,6 +126,5 @@ document.addEventListener('pointerdown', (e) => {
 initHero();
 initHandheld();
 initExperience();
-initShiplog();
 initTerminal(navigateTo);
 initContact();

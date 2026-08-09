@@ -55,14 +55,13 @@ There is also `.claude/launch.json`, which pins a dev server to port 5183 for to
 ## Project structure
 
 ```
-index.html          markup for all six tabs, plus the raven and perch SVGs
+index.html          markup for all five tabs, plus the raven and perch SVGs
 src/
   main.js           tab router, rune underline, typing effect, souls counter, ember sparks
   hero.js           the Three.js shrine scene
   handheld.js       the Projects handheld: folders, menus, detail views
   experience.js     the pilgrim's road and its milestone data
   terminal.js       the shell, its filesystem, easter eggs, and the rune game
-  shiplog.js        weekend commit entries
   contact.js        the raven flight and the dispatch plaques
   style.css         the whole design system, roughly 900 lines
 public/             static assets served as is (put resume.pdf here)
@@ -106,10 +105,6 @@ Five milestones from a B.E. in Mumbai to the current research role at Stony Broo
 
 A genuinely working shell, cyan on obsidian with a scanline overlay and a candle flicker keyframe. It supports command history with the arrow keys, tab completion against the command list, a small read only filesystem, a set of undocumented responses, and a memory mini game. Typing `cd projects` navigates the actual site through the fog gate transition.
 
-### Ship Log
-
-Reverse chronological weekend builds styled as commit messages, each sealed with a wax stamped date that rotates slightly and alternates direction so the column does not look mechanical. A streak counter tracks consecutive weekends at the bench.
-
 ### Contact, send a raven
 
 A raven sits perched on a bare limb, wings folded, one ember eye lit, waiting. As you scroll it drops off the branch and glides down a curved path through the page, banking into turns, flipping to face its direction of travel, and bobbing on the wingbeat. Behind it, an ember flight line draws itself.
@@ -128,7 +123,7 @@ Documented commands, which `help` will also list:
 | `cat experience.md` | The resume as formatted markdown |
 | `cat skills.json` | Skills as a JSON object |
 | `cat grind.txt` | A pointer toward the locked chest |
-| `cd <tab>` | Navigates the site. Accepts `projects`, `experience`, `shiplog`, `home`, `contact`, `~` |
+| `cd <tab>` | Navigates the site. Accepts `projects`, `experience`, `home`, `contact`, `~` |
 | `open resume` | Links to `/resume.pdf` |
 | `sudo hire-me` | Privilege escalation, in the good way |
 | `runes` | Starts the rune trial mini game |
@@ -201,7 +196,6 @@ All content lives in plain data structures at the top of each module. There is n
 | --- | --- |
 | Folders, projects, crow captions, stacks | `categories` array in `src/handheld.js` |
 | Roles, dates, bullets, badges, cities | `milestones` array in `src/experience.js` |
-| Weekend builds and streak | `entries` array in `src/shiplog.js`, streak in `index.html` |
 | Contact links and their captions | `dispatches` array in `src/contact.js` |
 | Terminal output and easter eggs | `files` and `commands` objects in `src/terminal.js` |
 | Colors, fonts, spacing | The `:root` block at the top of `src/style.css` |
