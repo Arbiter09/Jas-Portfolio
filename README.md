@@ -93,7 +93,9 @@ A small console found in a drawer, and the whole section runs on it. It browses 
 
 The screen is amber phosphor on obsidian rather than the classic green LCD, because ember is the only accent this site allows itself. Both colors are CSS variables at the top of the handheld block in `style.css`, so swapping to `#9bbc0f` on `#0f380f` is a two line change.
 
-**The device turns on its side past 1000px.** Portrait wastes two thirds of a desktop viewport and pushes the A/B buttons below the fold, so on a wide screen the same handheld lies down: display on the left, controls in a column on the right. That buys 48% more screen area at 1440px and puts the whole device, buttons included, above the fold. Twelve of the eighteen works then fit with no scrolling at all.
+**The device turns on its side past 1000px.** Portrait wastes two thirds of a desktop viewport and pushes the A/B buttons below the fold, so on a wide screen the same handheld lies down: display on the left, controls stacked in a narrow column on the right, D-pad above the buttons. Stacking rather than sitting them side by side keeps that column to 176px instead of 320px, and the width saved goes to the display.
+
+The result is a 708x472 screen against portrait's 446x401, up 87% in area, at the Game Boy Advance's actual 3:2 ratio. The whole device including the buttons sits above the fold, and sixteen of the eighteen works fit with no scrolling at all. The base font rises to 17px alongside it, holding the line near 65 characters, because past roughly 75 the text gets harder to read rather than easier.
 
 The markup does not change. The shell becomes a grid and the existing children are placed into it, which is why phones and tablets keep the portrait layout byte for byte. The breakpoint is 1000px rather than 900px for a measured reason: the control column takes a fixed 320px off the width, so below a 933px viewport the landscape screen would come out *smaller* than the portrait one it replaces.
 

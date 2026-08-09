@@ -516,7 +516,10 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   .hh-shell {
     width: min(1000px, 100%);
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
+    /* D-pad above the buttons rather than beside them, so the column only has
+       to be as wide as the widest single control (the A/B cluster, 150px
+       painted) instead of both side by side. The ~145px saved goes to the display. */
+    grid-template-columns: minmax(0, 1fr) 176px;
     grid-template-rows: auto 1fr auto auto;
     column-gap: 30px;
     align-items: center;
@@ -526,17 +529,22 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
     border-radius: 18px 18px 52px 18px;
   }
   .hh-bezel { grid-column: 1; grid-row: 1 / -1; }
-  .hh-topbar   { grid-column: 2; grid-row: 1; padding: 0 2px; }
-  .hh-controls { grid-column: 2; grid-row: 2; padding-top: 0; }
-  .hh-pills    { grid-column: 2; grid-row: 3; padding: 0 0 4px; gap: 22px; }
-  .hh-speaker  { grid-column: 2; grid-row: 4; padding-top: 0; }
+  .hh-topbar   { grid-column: 2; grid-row: 1; padding: 0; justify-content: space-between; }
+  .hh-controls {
+    grid-column: 2; grid-row: 2; padding-top: 0;
+    flex-direction: column; align-items: center; gap: 62px;
+  }
+  .hh-pills    { grid-column: 2; grid-row: 3; padding: 0 0 4px; gap: 16px; }
+  .hh-speaker  { grid-column: 2; grid-row: 4; padding-top: 0; gap: 5px; }
+  .hh-bezel-label { font-size: 9px; }
 
-  /* wider than tall now, and capped near 600px because past roughly 75
-     characters a line the text gets harder to read, not easier */
+  /* 3:2, which is the Game Boy Advance's actual ratio: the display gets the
+     freed width without getting taller and dropping below the fold again.
+     The base font rises with it, holding the line near 65 characters. */
   #hh-screen {
-    aspect-ratio: 6 / 5;
-    font-size: 16px;
-    padding: 15px 17px;
+    aspect-ratio: 3 / 2;
+    font-size: 17px;
+    padding: 16px 18px;
     gap: 12px;
   }
 
