@@ -275,6 +275,9 @@ export function initHandheld() {
   };
 
   let game = null, gameRaf = 0, gameLast = 0, gameHud = null;
+  // Which buttons are currently down. Discrete presses are enough to browse a
+  // menu, but a paddle has to slide for as long as you lean on a direction.
+  const held = new Set();
 
   const cat = () => categories[state.cat];
   const proj = () => cat().projects[state.proj];
@@ -357,7 +360,8 @@ export function initHandheld() {
     const ctx = canvas.getContext('2d');
     ctx.scale(dpr, dpr);
 
-    game = g.create(cw, ch);
+    held.clear();
+    game = g.create(cw, ch, held);
     gameLast = performance.now();
     cancelAnimationFrame(gameRaf);
     const loop = (t) => {
@@ -380,6 +384,7 @@ export function initHandheld() {
   function stopGame() {
     cancelAnimationFrame(gameRaf);
     gameRaf = 0; game = null; gameHud = null;
+    held.clear();
   }
 
   // ---------- power ----------
@@ -499,7 +504,18 @@ export function initHandheld() {
   });
   root.querySelectorAll('[data-btn]').forEach(b => {
     b.addEventListener('click', () => screen.focus());
+    // holding a control with the pointer counts as holding it, so a press and
+    // hold on the on-screen D-pad slides the paddle just like the arrow keys
+    b.addEventListener('pointerdown', () => held.add(b.dataset.btn));
+    b.addEventListener('pointerup', () => held.delete(b.dataset.btn));
+    b.addEventListener('pointerleave', () => held.delete(b.dataset.btn));
+    b.addEventListener('pointercancel', () => held.delete(b.dataset.btn));
   });
+
+  // a key released outside the page, or a lost window, must not leave a
+  // direction stuck down
+  window.addEventListener('keyup', (e) => { const b = KEYS[e.key]; if (b) held.delete(b); });
+  window.addEventListener('blur', () => held.clear());
 
   window.addEventListener('keydown', (e) => {
     // Only swallow the D-pad keys while the device actually holds focus.
@@ -510,6 +526,7 @@ export function initHandheld() {
     const btn = KEYS[e.key];
     if (!btn) return;
     e.preventDefault();
+    held.add(btn);
     press(btn);
     const el = root.querySelector(`[data-btn="${btn}"]`);
     if (el) { el.classList.add('pressed'); setTimeout(() => el.classList.remove('pressed'), 110); }

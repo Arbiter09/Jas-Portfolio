@@ -104,9 +104,11 @@ A slide switch on the top edge cuts the power, with the red POWER lamp beside it
 
 SELECT toggles sound, off by default. When on, each press gets a short square wave blip from the Web Audio API. Everything is keyboard playable too: arrow keys, Z or Enter for A, X for B.
 
-**The Games folder holds cartridges rather than write-ups.** SERPENT is snake, played with the D-pad, where the food is an ember and dying prints the obvious two words. SIEGE is breakout: the paddle takes left and right, A looses the ball, and bringing down the wall beats it. Both keep a best score in `localStorage`.
+**The Games folder holds cartridges rather than write-ups.** SERPENT is snake, played with the D-pad, where the food is an ember and dying prints the obvious two words. SIEGE is breakout: hold left or right to slide the paddle, A looses the ball, and bringing down the wall beats it. Both keep a best score in `localStorage`.
 
 The console owns the loop and the input; a game in `games.js` only knows how to advance itself by an elapsed number of milliseconds and paint one frame. Leaving with B, cutting the power or switching tabs all stop or freeze it, so nothing keeps running behind a screen nobody is looking at. The frame delta is clamped to 64ms, without which a delayed first frame hands a fixed-timestep game a few hundred milliseconds at once and it fast-forwards several moves before the player has touched anything.
+
+The console also tracks which buttons are currently down, not just which were pressed. Discrete presses are all a menu needs, but a paddle has to slide for as long as you lean on a direction, so `held` is passed to the cartridge and read each frame. Keyboard and pointer both feed it, and a key released off-page or a lost window clears it so a direction cannot stick.
 
 ### Experience, the pilgrim's road
 

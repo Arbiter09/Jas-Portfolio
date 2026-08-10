@@ -125,13 +125,18 @@ function createSerpent(w, h) {
 }
 
 /* ————— SIEGE: bring down the wall with a single ember ————— */
-function createSiege(w, h) {
-  const padW = Math.max(58, w * 0.16), padH = 9;
+// `held` is the set of buttons currently down, so the paddle slides while a
+// direction is held rather than hopping once per press.
+function createSiege(w, h, held) {
+  const padW = Math.max(64, w * 0.17), padH = 9;
   const padY = h - 26;
+  const PAD_SPEED = 0.72;      // px per ms: crosses the screen in about a second
+  const START_SPEED = 0.19;    // px per ms
+  const MAX_SPEED = 0.30;
   const COLS = 9, ROWS = 4;
   const bw = (w - 32) / COLS, bh = 15;
 
-  let padX, ball, bricks, lives, score, started, over, won, high;
+  let padX, ball, bricks, lives, score, started, over, won, high, speed;
 
   function reset(full = true) {
     padX = w / 2 - padW / 2;
@@ -142,14 +147,21 @@ function createSiege(w, h) {
         for (let c = 0; c < COLS; c++)
           bricks.push({ x: 16 + c * bw, y: 34 + r * (bh + 6), alive: true, row: r });
       lives = 3; score = 0; over = false; won = false; started = false;
+      speed = START_SPEED;
       high = best('siege', 0);
     }
   }
 
+  // one place that sets velocity, so the ball's speed never drifts with the
+  // bounces and a dead-centre paddle hit cannot leave it going straight up
+  function aim(angle) {
+    ball.vx = Math.sin(angle) * speed;
+    ball.vy = -Math.cos(angle) * speed;
+  }
+
   function launch() {
     ball.stuck = false;
-    ball.vx = (Math.random() * 0.16 - 0.08) + 0.2;
-    ball.vy = -0.34;
+    aim((Math.random() * 0.5 - 0.25) + 0.25);
   }
 
   reset();
@@ -159,13 +171,18 @@ function createSiege(w, h) {
     input(btn) {
       if (!started) { if (btn === 'a') started = true; return; }
       if (over) { if (btn === 'a') reset(true); return; }
-      if (btn === 'left') padX = Math.max(0, padX - 26);
-      if (btn === 'right') padX = Math.min(w - padW, padX + 26);
       if (btn === 'a' && ball.stuck) launch();
     },
     update(dt) {
       if (!started || over) return;
       const t = Math.min(dt, 32);
+
+      // the paddle slides for as long as a direction is held
+      let dir = 0;
+      if (held.has('left')) dir -= 1;
+      if (held.has('right')) dir += 1;
+      if (dir) padX = Math.max(0, Math.min(w - padW, padX + dir * PAD_SPEED * t));
+
       if (ball.stuck) { ball.x = padX + padW / 2; ball.y = padY - 8; return; }
 
       ball.x += ball.vx * t;
@@ -175,12 +192,11 @@ function createSiege(w, h) {
       if (ball.x > w - ball.r) { ball.x = w - ball.r; ball.vx *= -1; }
       if (ball.y < ball.r) { ball.y = ball.r; ball.vy *= -1; }
 
-      // paddle: bounce angle depends on where it lands
+      // paddle: where it lands sets the angle, up to about 60 degrees off vertical
       if (ball.vy > 0 && ball.y + ball.r >= padY && ball.y - ball.r <= padY + padH &&
           ball.x >= padX && ball.x <= padX + padW) {
-        const hit = (ball.x - (padX + padW / 2)) / (padW / 2);
-        ball.vy = -Math.abs(ball.vy);
-        ball.vx = hit * 0.32;
+        const hit = Math.max(-1, Math.min(1, (ball.x - (padX + padW / 2)) / (padW / 2)));
+        aim(hit * 1.05);
         ball.y = padY - ball.r;
       }
 
@@ -190,6 +206,11 @@ function createSiege(w, h) {
           b.alive = false;
           ball.vy *= -1;
           score += ROWS - b.row;
+          // the wall gets harder to hold as it thins, but only gently
+          speed = Math.min(MAX_SPEED, speed + 0.0035);
+          const mag = Math.hypot(ball.vx, ball.vy);
+          ball.vx = ball.vx / mag * speed;
+          ball.vy = ball.vy / mag * speed;
           if (!bricks.some(x => x.alive)) { won = true; over = true; high = best('siege', score); }
           break;
         }
@@ -198,7 +219,7 @@ function createSiege(w, h) {
       if (ball.y > h + 12) {
         lives--;
         if (lives <= 0) { over = true; high = best('siege', score); }
-        else reset(false);
+        else { speed = START_SPEED; reset(false); }
       }
     },
     draw(ctx) {
@@ -247,7 +268,7 @@ export const games = [
     name: 'SIEGE',
     tag: 'break the wall',
     crow: 'Knocking down a wall with one ember. Therapeutic, he claims.',
-    hint: '◀ ▶ MOVES · A LAUNCHES',
+    hint: 'HOLD ◀ ▶ TO SLIDE · A LAUNCHES',
     create: createSiege,
   },
 ];
