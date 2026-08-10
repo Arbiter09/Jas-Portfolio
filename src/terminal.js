@@ -90,8 +90,10 @@ one soul per problem; the shrine counter ticks to the same number.`,
   <span class="gold">epicuria/</span>      React food ordering · custom hooks · Jest suite
   <span class="gold">pokedex/</span>       all 151 from PokeAPI · localStorage cache · move modals
 
-<span class="warm">the-grind/</span>
-  <span class="gold">leetcode/</span>      300+ solved (hard/medium) · graphs · DP · data structures`;
+<span class="warm">games/</span>
+  <span class="gold">serpent/</span>       eat embers, grow, do not touch the walls
+  <span class="gold">siege/</span>         one ember against a wall of stone
+<span class="dim">  both playable on the handheld in Projects</span>`;
 
   const commands = {
     help: () => `<span class="gold">the archive responds to:</span>

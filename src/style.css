@@ -326,6 +326,13 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
 .scr-desc { display: flex; align-items: center; }
 .scr-crow { font-size: 0.9em; line-height: 1.6; color: var(--scr-ink); opacity: 0.92; }
 
+/* a cartridge paints straight onto the display, inside the same border the
+   text panes use */
+.scr-canvas {
+  flex: 1; min-height: 0; width: 100%; display: block;
+  border: 1px solid rgba(240,169,78,0.3); border-radius: 2px;
+}
+
 .scr-body { overflow-y: auto; scroll-behavior: smooth; scrollbar-width: none; }
 .scr-body::-webkit-scrollbar { display: none; }
 .scr-body p { font-size: 0.88em; line-height: 1.65; margin-bottom: 10px; color: var(--scr-ink); opacity: 0.92; }

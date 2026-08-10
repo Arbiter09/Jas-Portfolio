@@ -1,6 +1,9 @@
 // The workbench handheld: a small console found in a drawer.
 // Folders first, then works inside them. D-pad browses, A opens, B backs out.
 // The crow's line lives in the description box, the way a creature entry would.
+// The Games folder holds playable cartridges rather than write-ups.
+
+import { games } from './games.js';
 
 
 const categories = [
@@ -247,24 +250,11 @@ const categories = [
     ],
   },
   {
-    id: 'grind',
-    name: 'THE GRIND',
-    short: 'THE GRIND',
-    crow: 'The part of the resume that is just stubbornness, tabulated.',
-    projects: [
-      {
-        name: 'THE GRIND',
-        tag: '300+ solved',
-        crow: 'Three hundred and counting. He is not well.',
-        lines: [
-          '300+ LeetCode problems solved, Hard and Medium.',
-          'Graphs, dynamic programming, and advanced data structures.',
-          'The souls counter on the shrine ticks to the same number. One soul per problem.',
-        ],
-        stack: ['graphs', 'dynamic programming', 'data structures', 'stubbornness'],
-        link: 'https://leetcode.com/u/Jas_009/',
-      },
-    ],
+    id: 'games',
+    name: 'GAMES',
+    short: 'GAMES',
+    crow: 'He built a console, then built things to do on it. This is called avoidance.',
+    projects: games.map(g => ({ name: g.name, tag: g.tag, crow: g.crow, game: g })),
   },
 ];
 
@@ -278,11 +268,13 @@ export function initHandheld() {
   const state = {
     power: true,
     booting: false,
-    view: 'cats',      // cats | menu | detail
+    view: 'cats',      // cats | menu | detail | game
     cat: 0,
     proj: 0,
     sound: false,
   };
+
+  let game = null, gameRaf = 0, gameLast = 0, gameHud = null;
 
   const cat = () => categories[state.cat];
   const proj = () => cat().projects[state.proj];
@@ -292,6 +284,7 @@ export function initHandheld() {
     if (!state.power || state.booting) return;
     if (state.view === 'cats') return renderCats();
     if (state.view === 'menu') return renderMenu();
+    if (state.view === 'game') return renderGame();
     return renderDetail();
   }
 
@@ -342,6 +335,53 @@ export function initHandheld() {
       </div>`;
   }
 
+  // ---------- cartridges ----------
+  // The console owns the loop and the input; a game only knows how to advance
+  // itself and paint. Leaving the view, cutting the power or switching tabs all
+  // stop it, so nothing keeps running behind a screen nobody is looking at.
+  function renderGame() {
+    const g = proj().game;
+    screen.innerHTML = `
+      <div class="scr-head"><span>${g.name}</span><span class="scr-crumb">GAMES</span></div>
+      <canvas class="scr-canvas" id="game-canvas"></canvas>
+      <div class="scr-foot"><span id="game-hud">${g.hint}</span><span>B ▸ LEAVE</span></div>`;
+
+    const canvas = document.getElementById('game-canvas');
+    gameHud = document.getElementById('game-hud');
+    // lay out first so the canvas has its real box, then match the backing store
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cw = Math.round(rect.width), ch = Math.round(rect.height);
+    canvas.width = cw * dpr;
+    canvas.height = ch * dpr;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    game = g.create(cw, ch);
+    gameLast = performance.now();
+    cancelAnimationFrame(gameRaf);
+    const loop = (t) => {
+      gameRaf = requestAnimationFrame(loop);
+      // Clamp the delta. A delayed first frame, a background tab or a stalled
+      // renderer would otherwise hand the game hundreds of milliseconds at
+      // once, and a fixed-timestep game would fast-forward several moves and
+      // kill the player before they touched anything.
+      const dt = Math.min(t - gameLast, 64);
+      gameLast = t;
+      // freeze rather than tear down while the tab is elsewhere
+      if (!document.getElementById('page-projects').classList.contains('active')) return;
+      game.update(dt);
+      game.draw(ctx);
+      if (gameHud) gameHud.textContent = game.hud();
+    };
+    gameRaf = requestAnimationFrame(loop);
+  }
+
+  function stopGame() {
+    cancelAnimationFrame(gameRaf);
+    gameRaf = 0; game = null; gameHud = null;
+  }
+
   // ---------- power ----------
   const powerBtn = document.getElementById('hh-power');
 
@@ -352,6 +392,7 @@ export function initHandheld() {
 
     if (!on) {
       state.booting = false;
+      stopGame();
       screen.innerHTML = '';
       return;
     }
@@ -372,8 +413,13 @@ export function initHandheld() {
     beep(btn === 'a' ? 660 : btn === 'b' ? 330 : 520);
 
     if (btn === 'select') { state.sound = !state.sound; flash(`SOUND ${state.sound ? 'ON' : 'OFF'}`); return; }
-    if (btn === 'start') { state.view = 'cats'; render(); return; }
+    if (btn === 'start') { stopGame(); state.view = 'cats'; render(); return; }
 
+    if (state.view === 'game') {
+      if (btn === 'b') { stopGame(); state.view = 'menu'; render(); return; }
+      if (game) game.input(btn);
+      return;
+    }
     if (state.view === 'cats') return catsInput(btn);
     if (state.view === 'menu') return menuInput(btn);
     return detailInput(btn);
@@ -392,7 +438,7 @@ export function initHandheld() {
     if (btn === 'up') state.proj = (state.proj - 1 + list.length) % list.length;
     else if (btn === 'down') state.proj = (state.proj + 1) % list.length;
     else if (btn === 'b') { state.view = 'cats'; }
-    else if (btn === 'a') { state.view = 'detail'; }
+    else if (btn === 'a') { state.view = proj().game ? 'game' : 'detail'; }
     else return;
     render();
   }

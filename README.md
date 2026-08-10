@@ -62,6 +62,7 @@ src/
   handheld.js       the Projects handheld: folders, menus, detail views
   experience.js     the pilgrim's road and its milestone data
   terminal.js       the shell, its filesystem, easter eggs, and the rune game
+  games.js          the two playable cartridges: snake and breakout
   contact.js        the raven flight and the dispatch plaques
   style.css         the whole design system, roughly 900 lines
 public/             static assets served as is (put resume.pdf here)
@@ -89,7 +90,7 @@ The scene stops rendering entirely when scrolled out of view, via `IntersectionO
 
 ### Projects, the workbench handheld
 
-A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Web3, Full-Stack and The Grind, each showing how many works it holds), then the works inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
+A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Web3, Full-Stack and Games, each showing how many it holds), then the entries inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
 
 The screen is amber phosphor on obsidian rather than the classic green LCD, because ember is the only accent this site allows itself. Both colors are CSS variables at the top of the handheld block in `style.css`, so swapping to `#9bbc0f` on `#0f380f` is a two line change.
 
@@ -102,6 +103,10 @@ The markup does not change. The shell becomes a grid and the existing children a
 A slide switch on the top edge cuts the power, with the red POWER lamp beside it. Off means a genuinely dead device: the screen goes to bare glass, the red LED goes out, and the controls stop responding. Switching back on runs a short CRT warm-up, a line opening out of the middle, before the menu returns.
 
 SELECT toggles sound, off by default. When on, each press gets a short square wave blip from the Web Audio API. Everything is keyboard playable too: arrow keys, Z or Enter for A, X for B.
+
+**The Games folder holds cartridges rather than write-ups.** SERPENT is snake, played with the D-pad, where the food is an ember and dying prints the obvious two words. SIEGE is breakout: the paddle takes left and right, A looses the ball, and bringing down the wall beats it. Both keep a best score in `localStorage`.
+
+The console owns the loop and the input; a game in `games.js` only knows how to advance itself by an elapsed number of milliseconds and paint one frame. Leaving with B, cutting the power or switching tabs all stop or freeze it, so nothing keeps running behind a screen nobody is looking at. The frame delta is clamped to 64ms, without which a delayed first frame hands a fixed-timestep game a few hundred milliseconds at once and it fast-forwards several moves before the player has touched anything.
 
 ### Experience, the pilgrim's road
 
@@ -201,6 +206,7 @@ All content lives in plain data structures at the top of each module. There is n
 | To change | Edit |
 | --- | --- |
 | Folders, projects, crow captions, stacks | `categories` array in `src/handheld.js` |
+| The arcade cartridges | `games` array in `src/games.js` |
 | Roles, dates, bullets, badges, cities | `milestones` array in `src/experience.js` |
 | Contact links and their captions | `dispatches` array in `src/contact.js` |
 | Terminal output and easter eggs | `files` and `commands` objects in `src/terminal.js` |
