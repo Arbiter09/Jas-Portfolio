@@ -90,7 +90,7 @@ The scene stops rendering entirely when scrolled out of view, via `IntersectionO
 
 ### Projects, the workbench handheld
 
-A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Web3, Full-Stack and Games, each showing how many it holds), then the entries inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
+A small console found in a drawer, and the whole section runs on it. It browses two levels deep: a folder list first (Systems, AI / ML, Web3, Full-Stack and Games, each showing how many it holds), then the entries inside. The D-pad moves a pixel caret, A goes in, B comes back out, and left and right flip between works once you are inside one. Inside a write-up, up and down page by roughly a screenful rather than a fixed nudge, since the longest entries run several hundred pixels past the pane. The description box carries the crow's line for whatever is highlighted, the way a creature entry would.
 
 The screen is amber phosphor on obsidian rather than the classic green LCD, because ember is the only accent this site allows itself. Both colors are CSS variables at the top of the handheld block in `style.css`, so swapping to `#9bbc0f` on `#0f380f` is a two line change.
 

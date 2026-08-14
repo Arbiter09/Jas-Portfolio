@@ -14,13 +14,27 @@ const categories = [
     crow: 'Machines that cannot agree, taught to agree. Slowly, and in C++.',
     projects: [
       {
+        name: 'REAL-TIME PIPELINE',
+        tag: 'streaming, stress-tested',
+        crow: 'He killed his own broker mid-stream to see what would happen. Repeatedly.',
+        lines: [
+          'A ride-hailing event pipeline built to be broken on purpose. Kafka into a checkpointed Spark Structured Streaming job into a three-node Cassandra ring for keyed reads, with PostgreSQL holding a star schema and Airflow running the rollups, the dead-letter drain and backfills. One Docker Compose file brings up the lot.',
+          'A Kafka broker, a Spark executor and a Cassandra node were each SIGKILLed mid-stream under sustained load. Every event was accounted for across all six runs: written, or quarantined in a replayable dead letter queue. Nothing vanished. That is structural rather than lucky, resting on unclean leader election being disabled so an out-of-sync replica can never truncate acknowledged writes, and on Cassandra primary keys derived from the event so a replay upserts instead of duplicating.',
+          'Sustained 1,200 events/sec, which is 3,600 Cassandra writes/sec at replication factor 3. Defined strictly: the highest rate where the producer holds its target, consumer lag stays flat, the backlog drains and reconciliation shows zero unaccounted events. 1,400/sec fails that bar.',
+          'Three claims did not survive measurement and are documented rather than quietly dropped. Sub-second end-to-end latency was false, with a p95 floor near 5.4 seconds. A backoff A/B promising 95% less loss produced 87.7% on one batch and 18.4% on the next under identical config, which is noise. And permanent loss was zero regardless, because anything exhausting its retries lands in the DLQ, so there was never a loss percentage to reduce.',
+          'Three brokers and three Cassandra nodes run on one physical host. That proves failover logic; it proves nothing about cross-host network partitions.',
+        ],
+        stack: ['Kafka', 'Spark Streaming', 'Cassandra', 'PostgreSQL', 'Airflow', 'Prometheus', 'Grafana', 'Docker'],
+        link: 'https://github.com/Arbiter09/Real-Time-Data-Pipeline',
+      },
+      {
         name: 'MULTIPAXOSDB',
         tag: 'consensus store',
         crow: '10,081 transactions a second, up from 38. He will tell you the number again.',
         lines: [
           'A fault-tolerant distributed transaction system in C++ across 9 servers and 3 shards, implementing Multi-Paxos log replication and Two-Phase Commit over asynchronous gRPC on a single-threaded event loop.',
           'Crash recovery via Paxos ballot persistence and WAL replay. A duplicate-balance bug (474 duplicates) was fixed with idempotency guards, verified to exact 30,000/30,000 conservation under concurrent recovery.',
-          'Transaction throughput increased 272x to a mean 10,081 TPS, up from 38, by diagnosing single-transaction batching bottlenecks and generating concurrent workloads across all 3 shard leaders.',
+          'Transaction throughput went from 38 to a mean 10,081 TPS, a 265x improvement across seven runs of a Python harness. The bottleneck was neither the network nor consensus but batching: the system committed one transaction at a time, and the workload generator only ever drove a single shard leader instead of all three.',
         ],
         stack: ['C++', 'Multi-Paxos', '2PC', 'gRPC', 'LevelDB'],
         link: 'https://github.com/Arbiter09/MultiPaxosDB',
@@ -70,6 +84,34 @@ const categories = [
     crow: 'He builds things that build things now. I remain unemployed.',
     projects: [
       {
+        name: 'MOVIEPULSE',
+        tag: 'recommender',
+        crow: 'Two hundred and eighty models trained, and recommending whatever is popular still beats it.',
+        lines: [
+          'MovieLens 1M read out of MongoDB, curated through PySpark into Apache Iceberg tables with a user-stratified split, trained with Spark MLlib ALS, batch-scored nightly into Redis and served from FastAPI.',
+          'Plain L2-regularized ALS memorized the training set: 0.4736 train RMSE against 1.2121 on test, which is worse than predicting the global average rating (1.1464). A model losing to doing nothing is a sharper signal than a train/test gap alone. Scaling the penalty by each user and item rating count, the ALS-WR approach, brought test RMSE to 0.87.',
+          'The useful finding came out of the search. Eight ranks by seven regularization values at five folds is 280 fits. Across the whole rank range test RMSE spanned 0.0018, indistinguishable from noise, while Precision@10 moved monotonically from 0.0202 to 0.0492, a 2.4x difference. Selecting on error alone would have called the smallest rank equivalent and shipped less than half the ranking quality.',
+          'Serving does atomic model versioning: Redis keys are namespaced by version, and the batch job writes every user under the new one while the live pointer still names the old. A retrain that dies partway never publishes, and rollback is a single pointer write because the old keys were never deleted.',
+          'A popularity baseline, recommending the most-rated films to everyone, scores 0.0784 on Precision@10 and beats the tuned model. Explicit-feedback ALS optimizes squared error on observed ratings, so an obscure film with two five-star ratings can outrank a broadly loved one.',
+        ],
+        stack: ['PySpark', 'Spark MLlib', 'Apache Iceberg', 'MongoDB', 'Redis', 'FastAPI'],
+        link: 'https://github.com/Arbiter09/MoviePulse',
+      },
+      {
+        name: 'DEVMIND',
+        tag: 'PR review agent',
+        crow: 'It decides for itself what evidence it needs. He still asks me.',
+        lines: [
+          'A pull request review agent, where the question was never whether a model can write a review but whether it can decide what it needs to know. Claude gets nine MCP tool schemas and up to fifteen turns, choosing each call from what the last one returned. A documentation-only change never triggers vulnerability scanning; one touching dependencies does. The sequence is hardcoded nowhere.',
+          'A second pass scores the draft against twelve quality dimensions covering correctness, security, performance, error handling and test coverage, then rewrites its three weakest until it clears 3.5 out of 5 or hits three iterations. The diff sits in the cached system prompt, so a refinement pass costs roughly a tenth of the input tokens.',
+          'The worker fleet autoscales 4 to 15 pods on queue depth rather than CPU, because an agent waiting on the Anthropic and GitHub APIs idles near 2% of a core and a CPU-targeted autoscaler would never fire however deep the backlog grew. KEDA reads Redis stream lag and drives an ordinary HorizontalPodAutoscaler from it. Backlog held between 89 and 134 across 946 jobs.',
+          'Two traps worth naming. KEDA\'s default Redis trigger counts pending entries, which includes work already claimed, so adding pods raises the very metric being scaled on; switching to lag count breaks that feedback loop. And Argo CD with self-heal treats every scale-up as drift and scales the fleet straight back down, unless the Deployment omits replicas entirely and the Application ignores that path.',
+          'Published as @arbiter09/github-mcp on npm and registered on Smithery, usable standalone in Cursor or Claude Desktop. The deployed target is a local four-node kind cluster, so the scaling figures and Jaeger traces were measured there, not on EKS.',
+        ],
+        stack: ['Claude API', 'MCP', 'FastAPI', 'Redis Streams', 'Kubernetes', 'KEDA', 'Argo CD', 'OpenTelemetry'],
+        link: 'https://github.com/Arbiter09/DevMind',
+      },
+      {
         name: 'PAPERMIND',
         tag: 'research copilot',
         crow: 'It reads the papers so he can pretend he did.',
@@ -81,18 +123,6 @@ const categories = [
         ],
         stack: ['LangGraph', 'LangChain', 'Pinecone', 'Claude API', 'FastAPI', 'Python'],
         link: 'https://github.com/Arbiter09/PaperMind',
-      },
-      {
-        name: 'DEVMIND',
-        tag: 'code review agent',
-        crow: 'He cut token costs 38%. The other 62% remain. Watching.',
-        lines: [
-          'An autonomous multi-step code review agent tested across 500+ simulated pull requests, combining the Claude API with MCP-standardized GitHub integrations in an agentic loop.',
-          'Redis caching of repeated MCP tool results (file reads, diff fetches) plus structured prompt compression cut Claude API token costs 38%, holding sub-2s p95 latency under concurrent runs.',
-          'A self-evaluation loop critiques its own output against a rubric of 12 code quality dimensions, including security checks, before posting review comments.',
-        ],
-        stack: ['Claude API', 'MCP', 'FastAPI', 'Redis', 'React', 'OpenTelemetry', 'AWS EC2'],
-        link: 'https://github.com/Arbiter09/DevMind',
       },
       {
         name: 'MCPTRACE',
@@ -118,19 +148,6 @@ const categories = [
         ],
         stack: ['PyTorch', 'LoRA', 'HuggingFace', 'FastAPI', 'Redis', 'Docker', 'AWS EC2'],
         link: 'https://github.com/Arbiter09/NeuralServe',
-      },
-      {
-        name: 'MOVIEPULSE',
-        tag: 'recommender',
-        crow: 'An RMSE of 0.85. To predict whether humans like explosions. Groundbreaking.',
-        lines: [
-          'A hybrid recommendation engine combining ALS matrix factorization with content-based filtering on MovieLens 1M: 1M ratings, 6,040 users, 3,883 movies.',
-          'RMSE of 0.85 on held-out test data, a 24% improvement over a global-mean baseline.',
-          'Top-10 precision improved 56% (Precision@10 of 0.078 against 0.050) by tuning latent factor dimensionality and regularization through 5-fold cross-validation across 56 hyperparameter combinations.',
-          'Inference latency cut from 6.9ms to 0.9ms (7.7x) by precomputing and caching top-N recommendations in Redis, serving 1,087 req/s at 200 concurrent requests with zero failures.',
-        ],
-        stack: ['Python', 'scikit-learn', 'FastAPI', 'Redis', 'PostgreSQL'],
-        link: 'https://github.com/Arbiter09/MoviePulse',
       },
     ],
   },
@@ -258,7 +275,11 @@ const categories = [
   },
 ];
 
-const BODY_STEP = 34; // pixels the D-pad scrolls a detail pane per press
+// The D-pad scrolls a detail pane by most of a screenful rather than a fixed
+// nudge. The longest write-ups run several hundred pixels past the pane, and a
+// 34px step turned those into a dozen presses.
+const BODY_STEP_RATIO = 0.68;
+const BODY_STEP_MIN = 90;
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function initHandheld() {
@@ -450,8 +471,9 @@ export function initHandheld() {
 
   function detailInput(btn) {
     const body = document.getElementById('scr-body');
-    if (btn === 'up' && body) { body.scrollTop -= BODY_STEP; return; }
-    if (btn === 'down' && body) { body.scrollTop += BODY_STEP; return; }
+    const step = body ? Math.max(BODY_STEP_MIN, body.clientHeight * BODY_STEP_RATIO) : 0;
+    if (btn === 'up' && body) { body.scrollTop -= step; return; }
+    if (btn === 'down' && body) { body.scrollTop += step; return; }
     if (btn === 'left' || btn === 'right') {
       const list = cat().projects;
       state.proj = (state.proj + (btn === 'right' ? 1 : -1) + list.length) % list.length;

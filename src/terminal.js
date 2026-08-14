@@ -52,10 +52,12 @@ export function initTerminal(navigateTo) {
   <span class="warm">"systems"</span>:   ["Multi-Paxos", "2PC", "raw sockets", "TCP/IP", "epoll/kqueue",
                 "gRPC", "eBPF/XDP", "RTOS", "LevelDB", "MVCC"],
   <span class="warm">"languages"</span>: ["Python", "C/C++", "Java", "Go", "JavaScript", "TypeScript", "SQL", "Bash"],
-  <span class="warm">"data_cloud"</span>:["AWS (EC2, RDS, S3, IAM)", "GCP", "Databricks", "Spark",
-                "Kafka", "PostgreSQL", "Redis", "MongoDB"],
+  <span class="warm">"data_cloud"</span>:["Kafka", "Spark Structured Streaming", "Cassandra", "Apache Iceberg",
+                "Airflow", "AWS (EC2, RDS, S3, IAM)", "Databricks", "PostgreSQL",
+                "Redis", "MongoDB"],
   <span class="warm">"backend"</span>:   ["FastAPI", "Spring Boot", "REST", "GraphQL", "gRPC",
-                "Docker", "Kubernetes", "CI/CD", "OpenTelemetry"],
+                "Docker", "Kubernetes", "KEDA", "Argo CD", "CI/CD",
+                "OpenTelemetry", "Prometheus", "Grafana"],
   <span class="warm">"frontend"</span>:  ["React", "Next.js", "Redux Toolkit", "Tailwind", "Vitest", "WCAG 2.1"],
   <span class="warm">"web3"</span>:      ["Solidity", "Foundry", "Chainlink", "Chainlink CCIP", "OpenZeppelin",
                 "ERC20", "ERC721", "invariant + fuzz testing", "Anvil"],
@@ -66,17 +68,18 @@ one soul per problem; the shrine counter ticks to the same number.`,
   };
 
   const projectsLs = `<span class="warm">systems/</span>
+  <span class="gold">pipeline/</span>      Kafka→Spark→Cassandra · zero silent loss under 6 kills
   <span class="gold">multipaxosdb/</span>  9 servers · 3 shards · Multi-Paxos + 2PC · 10,081 TPS
   <span class="gold">armforge/</span>      AArch64 bare metal · RTOS scheduler · 4µs WCRT
   <span class="gold">kvstore/</span>       Redis-compatible C++17 engine · 836,183 ops/s
   <span class="gold">tcpip/</span>         user-space stack · 850 Mbps · 46µs SYN-to-ACK
 
 <span class="warm">ai-ml/</span>
+  <span class="gold">moviepulse/</span>    ALS on Iceberg · RMSE 0.87 · P@10 moved 2.4x, RMSE did not
+  <span class="gold">devmind/</span>       PR review agent · 9 MCP tools · KEDA-autoscaled
   <span class="gold">papermind/</span>     multi-agent research assistant · 87% answer relevance
-  <span class="gold">devmind/</span>       code review agent · MCP · −38% token spend
   <span class="gold">mcptrace/</span>      MCP tool-call inspector · SSE dashboard · pytest plugin
   <span class="gold">neuralserve/</span>   LLaMA 3.1 8B LoRA · ROUGE-L 0.29→0.41 · p95 &lt;420ms
-  <span class="gold">moviepulse/</span>    hybrid recommender · RMSE 0.85 · 7.7x faster inference
 
 <span class="warm">web3/</span>
   <span class="gold">stablecoin/</span>    over-collateralized DSC · WETH/WBTC · Chainlink oracles
