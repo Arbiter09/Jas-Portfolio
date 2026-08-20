@@ -98,6 +98,21 @@ const categories = [
         link: 'https://github.com/Arbiter09/MoviePulse',
       },
       {
+        name: 'TRIAGESWARM',
+        tag: 'self-correcting agents',
+        crow: 'He hired a second model to tell the first one it was wrong. It agrees, constantly.',
+        lines: [
+          'A customer support swarm on LangGraph: a classifier and retriever on Claude Haiku 4.5, a drafter on Sonnet 5, and a critic on Opus 5, reading a 26,872-ticket corpus through three MCP servers for knowledge base search, the ticket store and a mock CRM. The critic deliberately runs a stronger model than the drafter, because a drafter and critic on the same model share blind spots and wave each other through.',
+          'The critic grades against retrieved documents rather than impressions. Every factual claim in a draft has to resolve to a doc_id in the exact snippets the drafter was given, so a cited document that was never retrieved is an automatic failure rather than a judgement call. When the grounding check is what fails, the loop goes back to retrieval instead of redrafting, because a second draft over the same thin context reproduces the same invention. Everything else retries the drafter directly, with the specific failed dimensions and the critic\'s feedback injected into the next prompt.',
+          'Retrieval formulates a query rather than embedding the ticket, and that step earned its place by measurement. Customer phrasing and policy vocabulary sit far enough apart that "customer says they will sue us" does not surface the legal-action escalation threshold anywhere in the top five, while an agent-written "escalation threshold legal action lawyer regulator" returns it at rank one. An earlier chunker had made this worse by merging four unrelated escalation thresholds into one 1,400-character block; splitting on headings took the corpus from 12 chunks to 33 and made the rule findable at all.',
+          'The eval harness treats prompt and graph changes like code changes. A frozen 120-ticket set spans all 27 intents and includes eight tickets the knowledge base deliberately does not cover, which catch a system inventing policy rather than admitting ignorance. It reports pass rate before and after retries as a pair, because a single number cannot tell you whether the expensive part of the architecture is doing anything. The comparison tool exits non-zero on regression so it can block a merge, and refuses to compare runs from different providers or retry caps.',
+          'Two migrations were verified by differential evaluation rather than by reading the diff. The LangGraph port was run against the original plain-Python runner over the same tickets and matched on all 40, route path and retry count included; moving the tool layer onto MCP subprocesses moved zero of nine guarded metrics. The plain runner is still in the repository for exactly that reason.',
+          'The honest part. A local run on Qwen2.5 7B, standing in for Claude while the API bill was zero, passed 12.5% of drafts on the first attempt and 12.5% after an average of 2.6 retries. The loop spent the expensive half of its budget and rescued nothing, which is precisely the condition the paired metric exists to expose and a single pass rate would have hidden. It says the drafter tier was wrong, not the loop. Everything else in the repository runs against a deterministic offline mock, and every figure it produces is labelled as such in the CLI, the report and the dashboard, because an unlabelled mock number is how a fake benchmark ends up on a resume.',
+        ],
+        stack: ['LangGraph', 'MCP', 'Claude API', 'ChromaDB', 'Pydantic', 'FastAPI', 'Ollama'],
+        link: 'https://github.com/Arbiter09/Customer-Support-Triage',
+      },
+      {
         name: 'DEVMIND',
         tag: 'PR review agent',
         crow: 'It decides for itself what evidence it needs. He still asks me.',
