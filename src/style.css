@@ -299,9 +299,21 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   border-bottom: 1px solid rgba(240,169,78,0.22); padding-bottom: 7px;
   display: flex; justify-content: space-between; flex-shrink: 0;
 }
-.scr-menu { display: flex; flex-direction: column; gap: 3px; flex-shrink: 0; }
+.scr-menu {
+  display: flex; flex-direction: column; gap: 3px;
+  /* The folders each hold a different number of works, and AI/ML now holds
+     enough to run past the glass. The list takes what height is left and
+     scrolls inside itself rather than shoving the description box and the
+     footer off the bottom of a fixed-ratio screen. */
+  flex: 1 1 auto; min-height: 0;
+  overflow-y: auto; scrollbar-width: none; overscroll-behavior: contain;
+}
+.scr-menu::-webkit-scrollbar { display: none; }
+.scr-menu.more-down { -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%); mask-image: linear-gradient(180deg, #000 82%, transparent 100%); }
+.scr-menu.more-up { -webkit-mask-image: linear-gradient(0deg, #000 82%, transparent 100%); mask-image: linear-gradient(0deg, #000 82%, transparent 100%); }
+.scr-menu.more-up.more-down { -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12% 88%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 12% 88%, transparent 100%); }
 .scr-row {
-  display: flex; align-items: center; gap: 9px;
+  display: flex; align-items: center; gap: 9px; flex-shrink: 0;
   font-size: 1.05em; letter-spacing: 0.08em; color: var(--scr-dim);
   padding: 3px 4px; border-radius: 2px;
   transition: color 0.15s, background 0.15s;
@@ -323,7 +335,10 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   border-radius: 2px; padding: 10px 12px;
   flex: 1; min-height: 0;
 }
-.scr-desc { display: flex; align-items: center; }
+/* The crow's line sets its own height — however many lines it runs to — and
+   the list above takes whatever is left. The other way round, a long line
+   overflowed its own border and printed over the footer. */
+.scr-desc { display: flex; align-items: center; flex: 0 0 auto; }
 .scr-crow { font-size: 0.9em; line-height: 1.6; color: var(--scr-ink); opacity: 0.92; }
 
 /* a cartridge paints straight onto the display, inside the same border the
@@ -558,8 +573,10 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   /* The extra height goes to the list and the entry box rather than pooling as
      dead space: taller rows, and a description panel with the weight it has on
      a real handheld instead of one thin line. */
-  .scr-menu { flex: 1; justify-content: center; gap: 4px; }
-  .scr-row { padding: 9px 5px; }
+  /* `safe center` keeps a short list centred but falls back to the top edge
+     once the list overflows, so the first row is never scrolled out of reach. */
+  .scr-menu { justify-content: safe center; gap: 4px; }
+  .scr-row { padding: 7px 5px; }
   .scr-desc { flex: 0 0 auto; min-height: 6.4em; }
 
   .hh-hint { margin-top: 22px; }

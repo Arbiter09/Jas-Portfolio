@@ -333,6 +333,26 @@ export function initHandheld() {
   const proj = () => cat().projects[state.proj];
 
   // ---------- rendering ----------
+  // Each render rewrites the screen, so any scroll position in the list goes
+  // with it. Once a menu is painted, walk the highlighted row back into view:
+  // a caret you cannot see makes the D-pad unreadable.
+  function keepSelectedVisible() {
+    const menu = screen.querySelector('.scr-menu');
+    if (!menu) return;
+    const on = menu.querySelector('.scr-row.on');
+    if (on) on.scrollIntoView({ block: 'nearest' });
+    markMenuEdges(menu);
+    menu.addEventListener('scroll', () => markMenuEdges(menu), { passive: true });
+  }
+
+  // A list that runs past the glass gets its cut edge softened, so it reads as
+  // more rows below rather than a row someone forgot to finish.
+  function markMenuEdges(menu) {
+    const over = menu.scrollHeight - menu.clientHeight > 1;
+    menu.classList.toggle('more-up', over && menu.scrollTop > 1);
+    menu.classList.toggle('more-down', over && menu.scrollTop < menu.scrollHeight - menu.clientHeight - 1);
+  }
+
   function render() {
     if (!state.power || state.booting) return;
     if (state.view === 'cats') return renderCats();
@@ -358,14 +378,16 @@ export function initHandheld() {
       <div class="scr-foot">
         <span>${c.projects.length} works</span><span>A ▸ OPEN</span>
       </div>`;
+    keepSelectedVisible();
   }
 
   function renderMenu() {
     const p = proj();
+    const list = cat().projects;
     screen.innerHTML = `
-      <div class="scr-head"><span>${cat().short}</span><span class="scr-crumb">B ▸ FOLDERS</span></div>
+      <div class="scr-head"><span>${cat().short}</span><span class="scr-crumb">${state.proj + 1}/${list.length} · B ▸ FOLDERS</span></div>
       <div class="scr-menu">
-        ${cat().projects.map((x, i) => `
+        ${list.map((x, i) => `
           <div class="scr-row${i === state.proj ? ' on' : ''}">
             <span class="scr-caret">${i === state.proj ? '▶' : ''}</span>
             <span class="scr-name">${x.name}</span>
@@ -373,6 +395,7 @@ export function initHandheld() {
       </div>
       <div class="scr-box scr-desc"><span class="scr-crow">"${p.crow}"</span></div>
       <div class="scr-foot"><span>${p.tag}</span><span>A ▸ OPEN</span></div>`;
+    keepSelectedVisible();
   }
 
   function renderDetail() {
