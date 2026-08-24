@@ -98,6 +98,20 @@ const categories = [
         link: 'https://github.com/Arbiter09/MoviePulse',
       },
       {
+        name: 'BREVITY GATE',
+        tag: 'RL for shorter answers',
+        crow: 'He wrote a reward that paid the model to stop thinking. It very nearly took the offer.',
+        lines: [
+          'GRPO on GSM8K, training Qwen2.5 to answer correctly first and briefly second. A group of completions is sampled per question, each is scored, and every completion gets its advantage set against the mean and standard deviation of its own group. There is no critic network, which is the whole reason it fits on a free tier GPU. The premise is that tokens-per-response is the dominant term in serving latency, so a model that stops early is cheaper to serve.',
+          'Gating the length penalty on correctness is the standard advice and it is not sufficient on its own. With an unbounded penalty, a long correct answer scored -28.20 against 0.00 for a short wrong one, which made being wrong cheaper than being thorough. Normalizing against the token budget and holding the penalty coefficient below the correctness bonus fixes it: the worst a correct answer can score is 2.2 minus alpha, against 0.2 for the best wrong one. A test sweeps completion length across five orders of magnitude to keep that invariant honest.',
+          'The answer extractor turned out to be the real attack surface. It fell back to the last number in the text, which handed full credit to a bare 18 with no reasoning attached: 1.998 against 1.811 for a full worked solution. The reward function was instructing the model to stop reasoning, and GRPO optimizes what you wrote down rather than what you meant. The reward path now requires the marker, the lenient fallback survives only in evaluation, and the extractor is checked against all 8,792 GSM8K reference answers in both modes before any training starts.',
+          'Then that fix created a worse problem. Strict extraction means a model that never emits the marker scores zero on every completion, and a reward identical across a group produces zero advantage and zero gradient. Probing before training showed exactly that: the base model was solving problems but emitting the marker 0% of the time, so the run would have burned hours teaching nothing while every script exited clean. Three worked examples in the prompt took format compliance from 25% to 70% and strict accuracy from 0% to 30%. A signal probe now refuses to start training on a dead reward, and a preflight diffs trainer arguments against the installed library before a model is loaded, which caught two renamed fields between TRL 0.14 and 1.10 in about a second.',
+          'The honest part. Both models trained for 120 steps on an M4, four generations per group. The baseline drifted from 73.8 to 80.9 tokens with accuracy flat, which is the verbosity creep the gate is built to counteract. The gated run drifted less, 71.4 to 76.1, ending 5.9% shorter and 1.8 accuracy points lower. On a single seed at 120 steps that gap sits inside the noise and nothing separates it from chance. A claimable result needs 500 or more steps, six to eight generations and three seeds, roughly two hours on a T4 against twenty on a laptop with no CUDA. The reward engineering is the finished part. The comparison is not, and the repository says so rather than rounding it up.',
+        ],
+        stack: ['PyTorch', 'TRL', 'GRPO', 'PEFT/LoRA', 'Hugging Face', 'Qwen2.5'],
+        link: 'https://github.com/Arbiter09/brevity-gate',
+      },
+      {
         name: 'TRIAGESWARM',
         tag: 'self-correcting agents',
         crow: 'He hired a second model to tell the first one it was wrong. It agrees, constantly.',
