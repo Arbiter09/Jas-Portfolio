@@ -299,36 +299,63 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   border-bottom: 1px solid rgba(240,169,78,0.22); padding-bottom: 7px;
   display: flex; justify-content: space-between; flex-shrink: 0;
 }
-.scr-menu {
-  display: flex; flex-direction: column; gap: 3px;
-  /* The folders each hold a different number of works, and AI/ML now holds
-     enough to run past the glass. The list takes what height is left and
-     scrolls inside itself rather than shoving the description box and the
-     footer off the bottom of a fixed-ratio screen. */
+/* The desktop: folders and works as icons on a grid. A grid holds a
+   seven-item folder in the room a list gave four, and the column count is
+   left to the browser so a narrow screen simply lays out fewer of them. It
+   can still scroll, in case a folder ever outgrows even this. */
+.scr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.4em, 1fr));
+  /* `safe` keeps the icons centred while they fit and pins them to the top
+     edge once they do not, so the first row is never scrolled out of reach. */
+  align-content: safe center;
+  gap: 0.7em 0.3em;
   flex: 1 1 auto; min-height: 0;
   overflow-y: auto; scrollbar-width: none; overscroll-behavior: contain;
+  padding-top: 0.15em;
 }
-.scr-menu::-webkit-scrollbar { display: none; }
-.scr-menu.more-down { -webkit-mask-image: linear-gradient(180deg, #000 82%, transparent 100%); mask-image: linear-gradient(180deg, #000 82%, transparent 100%); }
-.scr-menu.more-up { -webkit-mask-image: linear-gradient(0deg, #000 82%, transparent 100%); mask-image: linear-gradient(0deg, #000 82%, transparent 100%); }
-.scr-menu.more-up.more-down { -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 12% 88%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 12% 88%, transparent 100%); }
-.scr-row {
-  display: flex; align-items: center; gap: 9px; flex-shrink: 0;
-  font-size: 1.05em; letter-spacing: 0.08em; color: var(--scr-dim);
-  padding: 3px 4px; border-radius: 2px;
-  transition: color 0.15s, background 0.15s;
+.scr-grid::-webkit-scrollbar { display: none; }
+.scr-grid.more-down { -webkit-mask-image: linear-gradient(180deg, #000 84%, transparent 100%); mask-image: linear-gradient(180deg, #000 84%, transparent 100%); }
+.scr-grid.more-up { -webkit-mask-image: linear-gradient(0deg, #000 84%, transparent 100%); mask-image: linear-gradient(0deg, #000 84%, transparent 100%); }
+.scr-grid.more-up.more-down { -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14% 86%, transparent 100%); mask-image: linear-gradient(180deg, transparent 0%, #000 14% 86%, transparent 100%); }
+
+.scr-tile {
+  display: flex; flex-direction: column; align-items: center; gap: 0.3em;
+  padding: 0.25em 0.15em; cursor: pointer;
+  color: var(--scr-dim);
+  transition: color 0.15s;
 }
-.scr-row.on { color: var(--scr-ink); background: rgba(240,169,78,0.1); }
-.scr-caret { width: 0.75em; font-size: 0.72em; }
-.scr-name { flex: 1; }
-.scr-folder { font-size: 0.9em; opacity: 0.7; }
+.scr-glyph { position: relative; display: block; line-height: 0; }
+.scr-ico {
+  width: 2.8em; height: 2.8em; display: block;
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linejoin: round; stroke-linecap: round;
+}
+/* how many works are in the folder, written on the folder's face */
 .scr-count {
-  font-size: 0.62em; letter-spacing: 0.1em; opacity: 0.7;
-  border: 1px solid rgba(240,169,78,0.3); border-radius: 2px; padding: 1px 6px;
+  position: absolute; left: 0; right: 0; top: 56%;
+  font-size: 0.72em; letter-spacing: 0; line-height: 1; text-align: center;
+  color: currentColor; opacity: 0.9;
 }
+/* Names run long — REAL-TIME PIPELINE, ETHDENVER 2025 — so a label takes two
+   lines and then gives up, rather than shoving its neighbours out of line. */
+.scr-label {
+  font-size: 0.6em; letter-spacing: 0.06em; text-align: center;
+  line-height: 1.35; padding: 0.15em 0.35em; border-radius: 2px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden; overflow-wrap: anywhere;
+}
+
+/* Selection, the way a desktop shows it: the icon lights up and the label sits
+   on a filled plate. */
+.scr-tile.on { color: var(--scr-ink); }
+.scr-tile.on .scr-ico { filter: drop-shadow(0 0 5px rgba(240,169,78,0.55)); }
+.scr-tile.on .scr-label { background: rgba(240,169,78,0.22); color: var(--scr-ink); }
+/* hover is a hint that the icon is clickable, deliberately weaker than the
+   selection so the two never read as two cursors */
+.scr-tile:hover { color: #b98246; }
+
 .scr-crumb { opacity: 0.75; }
-.scr-row.on .scr-caret { animation: caret-nudge 0.85s steps(2) infinite; }
-@keyframes caret-nudge { 50% { transform: translateX(2px); } }
 
 .scr-box {
   border: 1px solid rgba(240,169,78,0.3);
@@ -519,9 +546,16 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
   .hh-shell { padding: 16px 16px 20px; }
   .hh-dpad { width: 106px; height: 106px; }
   .hh-round { width: 52px; height: 52px; }
-  /* a narrow screen has to grow taller instead of wider, or the menu and its
+  /* a narrow screen has to grow taller instead of wider, or the grid and its
      description box run out of room */
   #hh-screen { aspect-ratio: 9 / 10; padding: 11px 12px; }
+
+  /* Tighter icons buy a fourth column, which is what puts a seven-work folder
+     into two rows on a phone instead of three — the difference between the
+     grid fitting the glass and having to scroll. */
+  .scr-grid { grid-template-columns: repeat(auto-fill, minmax(4.6em, 1fr)); gap: 0.55em 0.2em; }
+  .scr-ico { width: 2.5em; height: 2.5em; }
+  .scr-label { font-size: 0.58em; letter-spacing: 0.03em; padding: 0.15em 0.2em; }
 }
 
 /* ————— the handheld, turned on its side —————
@@ -570,13 +604,12 @@ code { font-family: var(--mono); font-size: 0.85em; color: var(--ember); }
     gap: 12px;
   }
 
-  /* The extra height goes to the list and the entry box rather than pooling as
-     dead space: taller rows, and a description panel with the weight it has on
-     a real handheld instead of one thin line. */
-  /* `safe center` keeps a short list centred but falls back to the top edge
-     once the list overflows, so the first row is never scrolled out of reach. */
-  .scr-menu { justify-content: safe center; gap: 4px; }
-  .scr-row { padding: 7px 5px; }
+  /* The extra height goes to the icons and the entry box rather than pooling
+     as dead space: a roomier grid, and a description panel with the weight it
+     has on a real handheld instead of one thin line. */
+  .scr-grid { gap: 1.1em 0.5em; grid-template-columns: repeat(auto-fill, minmax(7.6em, 1fr)); }
+  .scr-ico { width: 3.5em; height: 3.5em; }
+  .scr-label { font-size: 0.64em; }
   .scr-desc { flex: 0 0 auto; min-height: 6.4em; }
 
   .hh-hint { margin-top: 22px; }
@@ -928,7 +961,6 @@ body.moonlit .nav-tab.active { color: #a8cbe8; }
   #term-screen, #desktop::after { animation: none; }
   .type-cursor { animation: none; opacity: 1; }
   .scroll-line { animation: none; opacity: 0.5; }
-  .scr-row.on .scr-caret { animation: none; }
   #raven.perched { animation: none; }
   #raven.flying .r-wing-front, #raven.flying .r-wing-back { animation: none; }
   #raven .r-wing { transform: rotate(-6deg); }

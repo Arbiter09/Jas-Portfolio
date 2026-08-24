@@ -333,24 +333,85 @@ export function initHandheld() {
   const proj = () => cat().projects[state.proj];
 
   // ---------- rendering ----------
-  // Each render rewrites the screen, so any scroll position in the list goes
-  // with it. Once a menu is painted, walk the highlighted row back into view:
-  // a caret you cannot see makes the D-pad unreadable.
+  // The screen is a desktop rather than a list: folders and the works inside
+  // them are icons on a grid, which fits a seven-item folder in the room a
+  // list gave four. Drawn as strokes on a 24-unit box so they inherit the
+  // phosphor colour and stay crisp at any size the screen happens to be.
+  const ICONS = {
+    folder: '<path d="M2 6h7l2 3h11v11H2z"/><path d="M2 11h20" opacity="0.5"/>',
+    work: '<path d="M5 2h10l4 4v16H5z"/><path d="M15 2v4h4" opacity="0.7"/><path d="M8 11h8M8 15h8M8 19h5" opacity="0.5"/>',
+    cart: '<path d="M4 3h16v14l-4 4H4z"/><path d="M16 21v-4h4" opacity="0.7"/><path d="M8 7h8v5H8z" opacity="0.6"/>',
+  };
+
+  const icon = (kind) =>
+    `<svg class="scr-ico" viewBox="0 0 24 24" aria-hidden="true">${ICONS[kind]}</svg>`;
+
+  // Each render rewrites the screen, so any scroll position goes with it. Once
+  // a grid is painted, walk the selected icon back into view: a highlight you
+  // cannot see makes the D-pad unreadable. The grid holds every folder we have
+  // without scrolling, but it stays able to, in case a folder outgrows it.
   function keepSelectedVisible() {
-    const menu = screen.querySelector('.scr-menu');
-    if (!menu) return;
-    const on = menu.querySelector('.scr-row.on');
+    const grid = screen.querySelector('.scr-grid');
+    if (!grid) return;
+    const on = grid.querySelector('.scr-tile.on');
     if (on) on.scrollIntoView({ block: 'nearest' });
-    markMenuEdges(menu);
-    menu.addEventListener('scroll', () => markMenuEdges(menu), { passive: true });
+    markGridEdges(grid);
+    grid.addEventListener('scroll', () => markGridEdges(grid), { passive: true });
   }
 
-  // A list that runs past the glass gets its cut edge softened, so it reads as
-  // more rows below rather than a row someone forgot to finish.
-  function markMenuEdges(menu) {
-    const over = menu.scrollHeight - menu.clientHeight > 1;
-    menu.classList.toggle('more-up', over && menu.scrollTop > 1);
-    menu.classList.toggle('more-down', over && menu.scrollTop < menu.scrollHeight - menu.clientHeight - 1);
+  // A grid that runs past the glass gets its cut edge softened, so it reads as
+  // more icons below rather than a row someone forgot to finish.
+  function markGridEdges(grid) {
+    const over = grid.scrollHeight - grid.clientHeight > 1;
+    grid.classList.toggle('more-up', over && grid.scrollTop > 1);
+    grid.classList.toggle('more-down', over && grid.scrollTop < grid.scrollHeight - grid.clientHeight - 1);
+  }
+
+  // How many icons the grid fitted on a row. The column count is CSS's
+  // decision — it changes with the width of the screen — so it is read back
+  // off the laid-out tiles rather than guessed at.
+  function gridColumns() {
+    const tiles = [...screen.querySelectorAll('.scr-tile')];
+    if (!tiles.length) return 1;
+    const first = tiles[0].offsetTop;
+    const wrapped = tiles.findIndex(t => t.offsetTop > first);
+    return wrapped === -1 ? tiles.length : wrapped;
+  }
+
+  // Left and right walk the icons in reading order and wrap around the ends.
+  // Up and down move a whole row and stop at the edges, the way a cursor on a
+  // desktop does: falling off the bottom row and reappearing at the top reads
+  // as a glitch rather than a feature.
+  function gridMove(i, count, btn) {
+    const cols = gridColumns();
+    if (btn === 'left') return (i - 1 + count) % count;
+    if (btn === 'right') return (i + 1) % count;
+
+    const rows = Math.ceil(count / cols);
+    const row = Math.floor(i / cols);
+    if (btn === 'up') return row === 0 ? i : i - cols;
+    if (btn === 'down') {
+      if (row === rows - 1) return i;            // already on the bottom row
+      return Math.min(i + cols, count - 1);      // last row half-empty: nearest icon
+    }
+    return i;
+  }
+
+  // Move the highlight without repainting the screen: the icons keep their
+  // identity, and only the parts that actually describe the selection change.
+  function selectInPlace(i) {
+    if (state.view === 'cats') state.cat = i; else state.proj = i;
+    screen.querySelectorAll('.scr-tile').forEach((t, k) => t.classList.toggle('on', k === i));
+
+    const cats = state.view === 'cats';
+    screen.querySelector('.scr-crow').textContent = `"${(cats ? cat() : proj()).crow}"`;
+    const foot = screen.querySelector('.scr-foot').firstElementChild;
+    foot.textContent = cats ? `${cat().projects.length} works` : proj().tag;
+    if (!cats) {
+      screen.querySelector('.scr-crumb').textContent =
+        `${state.proj + 1}/${cat().projects.length} · B ▸ FOLDERS`;
+    }
+    keepSelectedVisible();
   }
 
   function render() {
@@ -365,13 +426,11 @@ export function initHandheld() {
     const c = cat();
     screen.innerHTML = `
       <div class="scr-head"><span>THE WORKBENCH</span></div>
-      <div class="scr-menu">
+      <div class="scr-grid">
         ${categories.map((x, i) => `
-          <div class="scr-row${i === state.cat ? ' on' : ''}">
-            <span class="scr-caret">${i === state.cat ? '▶' : ''}</span>
-            <span class="scr-folder">▤</span>
-            <span class="scr-name">${x.short}</span>
-            <span class="scr-count">${x.projects.length}</span>
+          <div class="scr-tile${i === state.cat ? ' on' : ''}" data-idx="${i}">
+            <span class="scr-glyph">${icon('folder')}<span class="scr-count">${x.projects.length}</span></span>
+            <span class="scr-label">${x.short}</span>
           </div>`).join('')}
       </div>
       <div class="scr-box scr-desc"><span class="scr-crow">"${c.crow}"</span></div>
@@ -386,11 +445,11 @@ export function initHandheld() {
     const list = cat().projects;
     screen.innerHTML = `
       <div class="scr-head"><span>${cat().short}</span><span class="scr-crumb">${state.proj + 1}/${list.length} · B ▸ FOLDERS</span></div>
-      <div class="scr-menu">
+      <div class="scr-grid">
         ${list.map((x, i) => `
-          <div class="scr-row${i === state.proj ? ' on' : ''}">
-            <span class="scr-caret">${i === state.proj ? '▶' : ''}</span>
-            <span class="scr-name">${x.name}</span>
+          <div class="scr-tile${i === state.proj ? ' on' : ''}" data-idx="${i}">
+            <span class="scr-glyph">${icon(x.game ? 'cart' : 'work')}</span>
+            <span class="scr-label">${x.name}</span>
           </div>`).join('')}
       </div>
       <div class="scr-box scr-desc"><span class="scr-crow">"${p.crow}"</span></div>
@@ -503,9 +562,10 @@ export function initHandheld() {
     return detailInput(btn);
   }
 
+  const DIRS = ['up', 'down', 'left', 'right'];
+
   function catsInput(btn) {
-    if (btn === 'up') state.cat = (state.cat - 1 + categories.length) % categories.length;
-    else if (btn === 'down') state.cat = (state.cat + 1) % categories.length;
+    if (DIRS.includes(btn)) state.cat = gridMove(state.cat, categories.length, btn);
     else if (btn === 'a') { state.proj = 0; state.view = 'menu'; }
     else return;
     render();
@@ -513,8 +573,7 @@ export function initHandheld() {
 
   function menuInput(btn) {
     const list = cat().projects;
-    if (btn === 'up') state.proj = (state.proj - 1 + list.length) % list.length;
-    else if (btn === 'down') state.proj = (state.proj + 1) % list.length;
+    if (DIRS.includes(btn)) state.proj = gridMove(state.proj, list.length, btn);
     else if (btn === 'b') { state.view = 'cats'; }
     else if (btn === 'a') { state.view = proj().game ? 'game' : 'detail'; }
     else return;
@@ -564,6 +623,23 @@ export function initHandheld() {
   // ---------- wiring ----------
   root.querySelectorAll('[data-btn]').forEach(b => {
     b.addEventListener('click', () => press(b.dataset.btn));
+  });
+
+  // Icons answer to a mouse the way icons do: one click selects, two opens.
+  // The D-pad remains the honest way in, but nobody should have to discover
+  // that before anything responds to a click.
+  //
+  // The selection moves in place rather than through render(): a full repaint
+  // would replace the icon under the cursor between the two clicks, and a
+  // browser only raises dblclick when both landed on the same element.
+  screen.addEventListener('click', (e) => {
+    const tile = e.target.closest('.scr-tile');
+    if (!tile || !state.power || state.booting) return;
+    beep(520);
+    selectInPlace(Number(tile.dataset.idx));
+  });
+  screen.addEventListener('dblclick', (e) => {
+    if (e.target.closest('.scr-tile')) press('a');
   });
 
   const KEYS = {
