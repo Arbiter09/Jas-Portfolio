@@ -31,7 +31,14 @@ export function initTerminal(navigateTo) {
 - 5,000+ MCMC ensemble simulations (MGGG GerryChain) on Seawulf HPC;
   Slurm scheduling lifted throughput 35%
 
-<span class="warm">## Software Developer Intern</span> — Good Ai, San Francisco <span class="dim">(remote, Jul 2025–Jun 2026)</span>
+<span class="warm">## AI/ML Engineer</span> — Good AI, San Francisco <span class="dim">(remote, Jul 2026–present)</span>
+<span class="dim">  converted to full time after the internship below</span>
+- evaluation suite for an LLM agent that audits drug-registration filings:
+  85.5% recall, 86.5% specificity on 400 known-answer cases
+- adversarial + prompt-injection probes; release gate against production
+- 7,200-rule labeled dataset; zero-shot ranker + LoRA dual encoder
+
+<span class="warm">## Software Developer Intern</span> — Good AI, San Francisco <span class="dim">(remote, Jul 2025–Jun 2026)</span>
 - AWS SQS + Kinesis event pipeline, least-privilege IAM across 6 consumers,
   200K+ events/day at sub-150ms lag
 - 30+ reusable React + TypeScript components, WCAG 2.1, 95%+ Vitest coverage
